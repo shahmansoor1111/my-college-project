@@ -24,7 +24,7 @@ const IMG2 = fg2;
 const CARDS = [
   { icon: "📖", label: "Courses",     page: "courses",     desc: "Browse subjects and learning materials." },
   { icon: "📝", label: "Assessments", page: "assessments", desc: "Take quizzes and track your performance." },
-  { icon: "🤖", label: "AI Tutor",    page: "ai-tutor",    desc: "Get instant answers from our AI assistant." },
+  
   { icon: "🖼️", label: "Gallery",     page: "gallery",     desc: "Explore campus photos and videos." },
 ];
 
