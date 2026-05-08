@@ -61,7 +61,7 @@ const SLIDES = [IMG1, IMG2];
   },
   {
     img: seniorProfImg,
-    name: "Mr.[Ghazi]",
+    name: "Mr.[Ghazi Jan]",
     role: "Senior Professor",
     badge: "📚",
     desc: "A distinguished educator with decades of teaching experience, known for inspiring students and contributing to cutting-edge research in the field.",
