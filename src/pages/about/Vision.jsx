@@ -44,7 +44,7 @@ const CORE_VALUES = [
 
 export default function Vision({ navigate }) {
   return (
-    <PageLayout icon="🎯" title="Vision" breadcrumb="About FG → Vision" navigate={navigate}>
+    <PageLayout icon="" title="">
       <style>{`
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(24px); }

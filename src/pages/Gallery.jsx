@@ -1,5 +1,30 @@
 import { useState } from "react";
 import PageLayout from "../components/PageLayout";
+import one from "../img/1.jpeg"
+import two from "../img/2.jpeg"
+import three from "../img/3.jpeg"
+import four from "../img/4.jpeg"
+import five from "../img/5.jpeg"
+import six from "../img/6.jpeg"
+import seven from "../img/7.jpeg"
+import eight from "../img/8.jpeg"
+import nine from "../img/9.jpeg"
+import ten from "../img/10.jpeg"
+import eleven from "../img/11.jpeg"
+import twelve from "../img/12.jpeg"
+import thirteen from "../img/13.jpeg"
+import gall2 from "../img/gall2.jpeg"
+import gall1 from "../img/gall1.jpeg"
+import vid1 from "../img/v1.mp4"
+import vid2 from "../img/v2.mp4"
+import vid3 from "../img/v3.mp4"
+import vid4 from "../img/v4.mp4"
+import grade1 from "../img/grad1.avif"
+import grade2 from "../img/grad2.avif"
+import hall1 from "../img/hal1.avif"
+
+import pp1 from "../img/p1.avif"
+
 
 // ── REPLACE these imports with your actual image files ──
 // import img1 from "../assets/gallery/img1.jpg";
@@ -8,16 +33,16 @@ import PageLayout from "../components/PageLayout";
 
 // For now using placeholder colors — swap src values with your imports
 const IMAGES = [
-  { id: 1,  src: null, category: "Campus",  caption: "Main Building Front View" },
-  { id: 2,  src: null, category: "Campus",  caption: "College Gate Entrance" },
-  { id: 3,  src: null, category: "Campus",  caption: "College Grounds & Garden" },
-  { id: 4,  src: null, category: "Campus",  caption: "Library Interior" },
-  { id: 5,  src: null, category: "Campus",  caption: "Science Laboratory" },
-  { id: 6,  src: null, category: "Campus",  caption: "Computer Lab" },
-  { id: 7,  src: null, category: "Events",  caption: "Annual Prize Distribution" },
-  { id: 8,  src: null, category: "Events",  caption: "Independence Day Celebration" },
-  { id: 9,  src: null, category: "Events",  caption: "College Seminar 2024" },
-  { id: 10, src: null, category: "Events",  caption: "Welcome Ceremony New Students" },
+  { id: 1,  src: one, category: "Campus",  caption: "Main Building Front View" },
+  { id: 2,  src: two, category: "Campus",  caption: "Principals" },
+  { id: 3,  src: thirteen, category: "Campus",  caption: "College Grounds & Garden" },
+  { id: 4,  src: five, category: "Campus",  caption: "Library Interior" },
+  { id: 5,  src: twelve, category: "Campus",  caption: "inside Laboratory" },
+  { id: 6,  src: three, category: "Campus",  caption: "Computer Block" },
+  { id: 7,  src: gall2, category: "Events",  caption: "Annual Prize Distribution" },
+  { id: 8,  src: four, category: "Events",  caption: "Cricket Ground" },
+  { id: 9,  src: eight, category: "Events",  caption: "Islmic Center" },
+  { id: 10, src: gall1, category: "Events",  caption: "Welcome Ceremony New Students" },
   { id: 11, src: null, category: "Events",  caption: "Science Exhibition" },
   { id: 12, src: null, category: "Events",  caption: "Cultural Fest Performance" },
   { id: 13, src: null, category: "Sports",  caption: "Cricket Match Finals" },
@@ -33,11 +58,11 @@ const IMAGES = [
 // ── REPLACE these with your actual video files or YouTube embed URLs ──
 // import vid1 from "../assets/gallery/vid1.mp4";
 const VIDEOS = [
-  { id: 1, src: null, thumb: null, caption: "College Overview Tour",        duration: "2:34" },
-  { id: 2, src: null, thumb: null, caption: "Annual Sports Day Highlights",  duration: "3:12" },
-  { id: 3, src: null, thumb: null, caption: "Prize Distribution Ceremony",   duration: "4:05" },
-  { id: 4, src: null, thumb: null, caption: "Science Exhibition 2024",       duration: "1:58" },
-  { id: 5, src: null, thumb: null, caption: "Students & Faculty Interview",  duration: "5:20" },
+  { id: 1, src: vid1, thumb: grade1, caption: "Graduation Cermony",        duration: "3:25" },
+  { id: 2, src: vid2, thumb: pp1, caption: "Final Year Project",  duration: "1:22" },
+  { id: 3, src: vid3, thumb: grade2, caption: "Short Clip Graduation Ceremony",   duration: "0:57" },
+  { id: 4, src: vid4, thumb: hall1, caption: "Respectable Guests",       duration: "0:24" },
+  { id: 5, src: null, thumb: gall1, caption: "Students & Faculty Interview",  duration: "5:20" },
 ];
 
 const CATEGORIES = ["All", "Campus", "Events", "Sports", "Academic"];

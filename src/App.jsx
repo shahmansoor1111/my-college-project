@@ -13,7 +13,8 @@ import BsPolSci from "./pages/academics/BsPolSci";
 import BsEnglish from "./pages/academics/BsEnglish";
 import Courses from "./pages/Courses";
 import Assessments from "./pages/Assessments";
-import AITutor from "./pages/AITutor";
+import AIHelper from "./pages/AIHelper";
+import AIAssessment from "./pages/AIAssessment";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
 
@@ -31,7 +32,8 @@ const PAGES = {
   "bs-english": BsEnglish,
   courses: Courses,
   assessments: Assessments,
-  "ai-tutor": AITutor,
+  "ai-helper": AIHelper,
+  "ai-assessment": AIAssessment,
   gallery: Gallery,
   contact: Contact,
 };

@@ -8,8 +8,8 @@ const QUIZ_DATA = {
     accent: "#c9a84c",
     questions: [
       { q: "What is the SI unit of electric current?", options: ["Ohm", "Ampere", "Watt", "Volt"], answer: 1 },
-      { q: "Which gas is most abundant in Earth\'s atmosphere?", options: ["Hydrogen", "Nitrogen", "Oxygen", "Carbon dioxide"], answer: 1 },
-      { q: "Newton\'s second law relates force to:", options: ["displacement", "momentum", "acceleration", "velocity"], answer: 2 },
+      { q: "Which gas is most abundant in Earth's atmosphere?", options: ["Hydrogen", "Nitrogen", "Oxygen", "Carbon dioxide"], answer: 1 },
+      { q: "Newton's second law relates force to:", options: ["displacement", "momentum", "acceleration", "velocity"], answer: 2 },
       { q: "The atomic number of Carbon is:", options: ["8", "12", "6", "14"], answer: 2 },
       { q: "Which lens corrects myopia?", options: ["Concave", "Bifocal", "Cylindrical", "Convex"], answer: 0 },
       { q: "Photosynthesis takes place in:", options: ["Nucleus", "Ribosome", "Chloroplast", "Mitochondria"], answer: 2 },
@@ -17,11 +17,11 @@ const QUIZ_DATA = {
       { q: "Chemical formula of water:", options: ["H₂O", "OH", "HO", "H₂O₂"], answer: 0 },
       { q: "Which particle has no electric charge?", options: ["Proton", "Neutron", "Electron", "Positron"], answer: 1 },
       { q: "Speed of light in vacuum:", options: ["3×10¹⁰ m/s", "3×10⁴ m/s", "3×10⁶ m/s", "3×10⁸ m/s"], answer: 3 },
-      { q: "Ohm\'s law states V =", options: ["I+R", "IR", "I²R", "I/R"], answer: 1 },
+      { q: "Ohm's law states V =", options: ["I+R", "IR", "I²R", "I/R"], answer: 1 },
       { q: "DNA stands for:", options: ["Dinitroribose Acid", "Deoxyribonitric Acid", "Diribonucleic Acid", "Deoxyribonucleic Acid"], answer: 3 },
       { q: "Which blood cells carry oxygen?", options: ["Plasma", "Platelets", "White blood cells", "Red blood cells"], answer: 3 },
       { q: "The powerhouse of the cell is:", options: ["Mitochondria", "Ribosome", "Chloroplast", "Nucleus"], answer: 0 },
-      { q: "Boyle\'s Law is related to:", options: ["Temperature & Volume", "Pressure & Volume", "Volume & Moles", "Pressure & Temperature"], answer: 1 },
+      { q: "Boyle's Law is related to:", options: ["Temperature & Volume", "Pressure & Volume", "Volume & Moles", "Pressure & Temperature"], answer: 1 },
     ],
   },
   "FSc Pre-Medical": {
@@ -58,12 +58,12 @@ const QUIZ_DATA = {
       { q: "Father of the Nation of Pakistan:", options: ["Allama Iqbal", "Quaid-e-Azam", "Liaquat Ali Khan", "Sir Syed"], answer: 1 },
       { q: "KPK provincial capital:", options: ["Lahore", "Peshawar", "Muzaffarabad", "Quetta"], answer: 1 },
       { q: "National language of Pakistan:", options: ["Pashto", "Punjabi", "Sindhi", "Urdu"], answer: 3 },
-      { q: "Allama Iqbal\'s Shikwa was written in:", options: ["Hindi", "Urdu", "Persian", "Punjabi"], answer: 1 },
+      { q: "Allama Iqbal's Shikwa was written in:", options: ["Hindi", "Urdu", "Persian", "Punjabi"], answer: 1 },
       { q: "Two-Nation Theory was based on:", options: ["Culture", "Language", "Economy", "Religion"], answer: 3 },
       { q: "Longest river in Pakistan:", options: ["Ravi", "Jhelum", "Indus", "Chenab"], answer: 2 },
       { q: "Peshawar famous historical landmark:", options: ["Faisal Mosque", "Badshahi Mosque", "Lahore Fort", "Qissa Khwani Bazaar"], answer: 3 },
-      { q: "In Urdu grammar \'ism\' refers to:", options: ["Adjective", "Noun", "Verb", "Adverb"], answer: 1 },
-      { q: "Pakistan\'s first prime minister:", options: ["ZA Bhutto", "Liaquat Ali Khan", "Yahya Khan", "Ayub Khan"], answer: 1 },
+      { q: "In Urdu grammar 'ism' refers to:", options: ["Adjective", "Noun", "Verb", "Adverb"], answer: 1 },
+      { q: "Pakistan's first prime minister:", options: ["ZA Bhutto", "Liaquat Ali Khan", "Yahya Khan", "Ayub Khan"], answer: 1 },
       { q: "Khyber Pass connects Pakistan with:", options: ["China", "India", "Afghanistan", "Iran"], answer: 2 },
       { q: "Indus Valley Civilization is approximately how old?", options: ["3000 years", "1000 years", "10000 years", "5000 years"], answer: 3 },
     ],
@@ -224,7 +224,7 @@ function ProgrammeSelect({ onSelect }) {
         </p>
       </div>
 
-      {/* Programme cards */}
+      {/* Programme cards — uniform hover: light grey lift */}
       <div style={{
         display:"grid",
         gridTemplateColumns:"repeat(auto-fill,minmax(250px,1fr))",
@@ -239,31 +239,30 @@ function ProgrammeSelect({ onSelect }) {
               onMouseEnter={() => setHovered(prog)}
               onMouseLeave={() => setHovered(null)}
               style={{
-                background: isHov ? `linear-gradient(135deg,${d.color}f0,${d.color}bb)` : "#fff",
-                border: `2px solid ${isHov ? d.color : "#e9ecef"}`,
+                background: isHov ? "#f8f9fa" : "#fff",
+                border: `2px solid ${isHov ? "#d1d5db" : "#e9ecef"}`,
                 borderRadius:"14px", padding:"28px 24px", cursor:"pointer",
-                textAlign:"left", transition:"all 0.22s",
-                boxShadow: isHov ? `0 12px 32px ${d.color}35` : "0 2px 10px rgba(0,0,0,0.05)",
-                transform: isHov ? "translateY(-4px)" : "none",
+                textAlign:"left", transition:"all 0.2s ease",
+                boxShadow: isHov ? "0 8px 24px rgba(0,0,0,0.10)" : "0 2px 8px rgba(0,0,0,0.05)",
+                transform: isHov ? "translateY(-3px)" : "none",
                 animation: `fadeUp 0.4s ease ${i*0.06}s both`,
               }}>
               <div style={{ fontSize:"34px",marginBottom:"14px" }}>{d.icon}</div>
               <div style={{
                 fontFamily:"'Playfair Display',serif",fontSize:"17px",marginBottom:"6px",
-                color: isHov ? "#fff" : "#103d25",transition:"color 0.2s",
+                color:"#103d25",
               }}>{prog}</div>
               <div style={{
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color: isHov ? "rgba(255,255,255,0.7)" : "#9ca3af",
-                transition:"color 0.2s",marginBottom:"16px",
+                color:"#9ca3af",marginBottom:"16px",
               }}>15 Questions · 15 Min Timer</div>
               <div style={{
                 display:"inline-flex",alignItems:"center",gap:"6px",
-                background: isHov ? "rgba(255,255,255,0.18)" : `${d.color}14`,
-                color: isHov ? "#fff" : d.color,
+                background: isHov ? "#103d25" : "#f3f4f6",
+                color: isHov ? "#fff" : "#374151",
                 padding:"6px 14px",borderRadius:"20px",
                 fontSize:"12px",fontFamily:"'DM Sans',sans-serif",fontWeight:700,
-                transition:"all 0.2s",borderRadius:"20px",
+                transition:"all 0.2s ease",
               }}>Start Quiz →</div>
             </button>
           );
@@ -295,7 +294,6 @@ function QuizScreen({ programme, onFinish, onBack }) {
     return () => clearInterval(timerRef.current);
   }, []);
 
-  // Scroll to top of quiz whenever question changes
   useEffect(() => {
     if (topRef.current) {
       topRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -315,14 +313,15 @@ function QuizScreen({ programme, onFinish, onBack }) {
     else { setCurrent(c => c + 1); setSelected(null); setConfirmed(false); }
   };
 
+  // Uniform option styles — grey for unselected hover, green/red only after confirm
   const optStyle = (idx) => {
     if (confirmed) {
       if (idx === q.answer)
-        return { bg:"rgba(26,92,56,0.1)", border:"#1a5c38", color:"#103d25", labelBg:"#1a5c38", labelColor:"#fff" };
-      if (idx === selected)
-        return { bg:"rgba(220,38,38,0.08)", border:"#dc2626", color:"#991b1b", labelBg:"#dc2626", labelColor:"#fff" };
+        return { bg:"rgba(26,92,56,0.08)", border:"#1a5c38", color:"#103d25", labelBg:"#1a5c38", labelColor:"#fff" };
+      if (idx === selected && idx !== q.answer)
+        return { bg:"rgba(220,38,38,0.06)", border:"#dc2626", color:"#991b1b", labelBg:"#dc2626", labelColor:"#fff" };
     } else if (selected === idx) {
-      return { bg:`${d.color}12`, border:d.color, color:d.color, labelBg:d.color, labelColor:"#fff" };
+      return { bg:"#f0fdf4", border:"#103d25", color:"#103d25", labelBg:"#103d25", labelColor:"#fff" };
     }
     return { bg:"#fff", border:"#e5e7eb", color:"#374151", labelBg:"#f3f4f6", labelColor:"#6b7280" };
   };
@@ -342,8 +341,8 @@ function QuizScreen({ programme, onFinish, onBack }) {
           fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:500,
           display:"flex",alignItems:"center",gap:"5px",transition:"all 0.18s",
         }}
-        onMouseEnter={e=>{e.currentTarget.style.borderColor="#103d25";e.currentTarget.style.color="#103d25"}}
-        onMouseLeave={e=>{e.currentTarget.style.borderColor="#e5e7eb";e.currentTarget.style.color="#6b7280"}}
+        onMouseEnter={e=>{e.currentTarget.style.background="#f8f9fa";e.currentTarget.style.borderColor="#d1d5db";}}
+        onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="#e5e7eb";}}
         >← Back</button>
 
         <div style={{ display:"flex",alignItems:"center",gap:"8px" }}>
@@ -376,14 +375,14 @@ function QuizScreen({ programme, onFinish, onBack }) {
           <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7280",fontWeight:500 }}>
             Question {current+1} <span style={{color:"#9ca3af"}}>of {qs.length}</span>
           </span>
-          <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:d.color,fontWeight:600 }}>
+          <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#103d25",fontWeight:600 }}>
             {Math.round((current+1)/qs.length*100)}% done
           </span>
         </div>
         <div style={{ background:"#f0f0f0",borderRadius:"6px",height:"7px",overflow:"hidden" }}>
           <div style={{
             height:"100%",borderRadius:"6px",
-            background:`linear-gradient(90deg,${d.color},#c9a84c)`,
+            background:"linear-gradient(90deg,#103d25,#c9a84c)",
             width:`${((current+1)/qs.length)*100}%`,transition:"width 0.4s ease",
           }} />
         </div>
@@ -398,8 +397,8 @@ function QuizScreen({ programme, onFinish, onBack }) {
         {/* Badge */}
         <div style={{
           display:"inline-flex",alignItems:"center",gap:"6px",
-          background:`${d.color}10`,border:`1px solid ${d.color}30`,
-          color:d.color,padding:"4px 12px",borderRadius:"20px",
+          background:"rgba(16,61,37,0.06)",border:"1px solid rgba(16,61,37,0.15)",
+          color:"#103d25",padding:"4px 12px",borderRadius:"20px",
           fontSize:"11px",fontFamily:"'DM Sans',sans-serif",fontWeight:700,
           letterSpacing:"1px",textTransform:"uppercase",marginBottom:"18px",
         }}>Q {current+1} / {qs.length}</div>
@@ -410,34 +409,40 @@ function QuizScreen({ programme, onFinish, onBack }) {
           color:"#103d25",lineHeight:1.55,marginBottom:"28px",fontWeight:600,
         }}>{q.q}</p>
 
-        {/* Options — 2 col grid */}
-        <div style={{
-          display:"grid",
-          gridTemplateColumns:"1fr 1fr",
-          gap:"12px",
-        }}>
+        {/* Options — uniform hover (light grey) */}
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
           {q.options.map((opt, idx) => {
             const s = optStyle(idx);
             const isCorrect = confirmed && idx === q.answer;
             const isWrong = confirmed && idx === selected && idx !== q.answer;
             return (
-              <button key={idx} onClick={() => !confirmed && setSelected(idx)} style={{
-                background:s.bg,border:`2px solid ${s.border}`,
-                borderRadius:"12px",padding:"14px 16px",
-                cursor:confirmed?"default":"pointer",
-                textAlign:"left",transition:"all 0.18s",
-                color:s.color,fontFamily:"'DM Sans',sans-serif",
-                fontSize:"14px",fontWeight:500,
-                display:"flex",alignItems:"center",gap:"12px",
-                boxShadow: selected===idx && !confirmed ? `0 4px 14px ${d.color}25` : "none",
-              }}
-              onMouseEnter={e=>{if(!confirmed&&selected!==idx){e.currentTarget.style.borderColor=d.color;e.currentTarget.style.background=`${d.color}08`;}}}
-              onMouseLeave={e=>{if(!confirmed&&selected!==idx){e.currentTarget.style.borderColor="#e5e7eb";e.currentTarget.style.background="#fff";}}}
-              >
-                {/* A B C D label */}
+              <button key={idx}
+                onClick={() => !confirmed && setSelected(idx)}
+                onMouseEnter={e => {
+                  if (!confirmed && selected !== idx) {
+                    e.currentTarget.style.background = "#f8f9fa";
+                    e.currentTarget.style.borderColor = "#d1d5db";
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!confirmed && selected !== idx) {
+                    e.currentTarget.style.background = "#fff";
+                    e.currentTarget.style.borderColor = "#e5e7eb";
+                  }
+                }}
+                style={{
+                  background:s.bg,border:`2px solid ${s.border}`,
+                  borderRadius:"12px",padding:"14px 16px",
+                  cursor:confirmed?"default":"pointer",
+                  textAlign:"left",transition:"all 0.18s ease",
+                  color:s.color,fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"14px",fontWeight:500,
+                  display:"flex",alignItems:"center",gap:"12px",
+                  boxShadow: selected===idx && !confirmed ? "0 2px 10px rgba(0,0,0,0.08)" : "none",
+                }}>
                 <span style={{
                   width:"30px",height:"30px",borderRadius:"50%",flexShrink:0,
-                  background: isCorrect?"#1a5c38":isWrong?"#dc2626":selected===idx?d.color:s.labelBg,
+                  background: isCorrect?"#1a5c38":isWrong?"#dc2626":selected===idx?"#103d25":s.labelBg,
                   color: isCorrect||isWrong||selected===idx?"#fff":s.labelColor,
                   display:"flex",alignItems:"center",justifyContent:"center",
                   fontSize:"12px",fontWeight:800,transition:"all 0.18s",fontFamily:"'DM Sans',sans-serif",
@@ -458,7 +463,7 @@ function QuizScreen({ programme, onFinish, onBack }) {
           {qs.map((_,i) => (
             <div key={i} style={{
               width:"9px",height:"9px",borderRadius:"50%",
-              background: i < current ? d.color : i===current ? "#c9a84c" : "#e5e7eb",
+              background: i < current ? "#103d25" : i===current ? "#c9a84c" : "#e5e7eb",
               transition:"background 0.3s",
             }} />
           ))}
@@ -466,12 +471,12 @@ function QuizScreen({ programme, onFinish, onBack }) {
 
         {!confirmed ? (
           <button onClick={confirm} disabled={selected===null} style={{
-            background: selected===null ? "#e5e7eb" : `linear-gradient(135deg,${d.color},${d.color}cc)`,
+            background: selected===null ? "#f3f4f6" : "linear-gradient(135deg,#103d25,#1a5c38)",
             color: selected===null ? "#9ca3af" : "#fff",
             border:"none",borderRadius:"10px",padding:"13px 30px",
             fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:700,
             cursor:selected===null?"not-allowed":"pointer",
-            boxShadow: selected!==null?`0 4px 16px ${d.color}35`:"none",
+            boxShadow: selected!==null?"0 4px 16px rgba(16,61,37,0.3)":"none",
             transition:"all 0.2s",
           }}>Confirm Answer</button>
         ) : (
@@ -541,14 +546,12 @@ function ResultScreen({ programme, answers, onRetry, onHome }) {
       </div>
 
       {/* Score pills */}
-      <div style={{
-        display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"14px",marginBottom:"28px",
-      }}>
+      <div style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"14px",marginBottom:"28px" }}>
         {[
           { label:"Correct", val:correct, color:"#1a5c38", bg:"rgba(26,92,56,0.08)", border:"rgba(26,92,56,0.2)" },
           { label:"Wrong",   val:wrong,   color:"#dc2626", bg:"rgba(220,38,38,0.08)", border:"rgba(220,38,38,0.2)" },
           { label:"Skipped", val:skipped, color:"#6b7280", bg:"rgba(107,114,128,0.08)", border:"rgba(107,114,128,0.2)" },
-          { label:"Score",   val:`${pct}%`, color:d.color, bg:`${d.color}10`, border:`${d.color}30` },
+          { label:"Score",   val:`${pct}%`, color:"#103d25", bg:"rgba(16,61,37,0.06)", border:"rgba(16,61,37,0.2)" },
         ].map(p => (
           <div key={p.label} style={{
             background:p.bg,border:`1.5px solid ${p.border}`,
@@ -606,17 +609,25 @@ function ResultScreen({ programme, answers, onRetry, onHome }) {
 
       {/* CTA */}
       <div style={{ display:"flex",gap:"14px",flexWrap:"wrap",justifyContent:"center" }}>
-        <button onClick={onRetry} style={{
-          background:"linear-gradient(135deg,#103d25,#1a5c38)",
-          color:"#fff",border:"none",borderRadius:"10px",padding:"13px 28px",
-          fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:700,
-          cursor:"pointer",boxShadow:"0 4px 16px rgba(16,61,37,0.3)",
-        }}>🔄 Retry This Quiz</button>
-        <button onClick={onHome} style={{
-          background:"#fff",color:"#103d25",border:"2px solid #103d25",
-          borderRadius:"10px",padding:"13px 28px",
-          fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:600,cursor:"pointer",
-        }}>🏠 Choose Another Programme</button>
+        <button onClick={onRetry}
+          onMouseEnter={e=>{e.currentTarget.style.opacity="0.9";e.currentTarget.style.transform="translateY(-2px)";}}
+          onMouseLeave={e=>{e.currentTarget.style.opacity="1";e.currentTarget.style.transform="none";}}
+          style={{
+            background:"linear-gradient(135deg,#103d25,#1a5c38)",
+            color:"#fff",border:"none",borderRadius:"10px",padding:"13px 28px",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:700,
+            cursor:"pointer",boxShadow:"0 4px 16px rgba(16,61,37,0.3)",
+            transition:"all 0.2s",
+          }}>🔄 Retry This Quiz</button>
+        <button onClick={onHome}
+          onMouseEnter={e=>{e.currentTarget.style.background="#f8f9fa";}}
+          onMouseLeave={e=>{e.currentTarget.style.background="#fff";}}
+          style={{
+            background:"#fff",color:"#103d25",border:"2px solid #103d25",
+            borderRadius:"10px",padding:"13px 28px",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:600,
+            cursor:"pointer",transition:"all 0.2s",
+          }}>🏠 Choose Another Programme</button>
       </div>
     </div>
   );
