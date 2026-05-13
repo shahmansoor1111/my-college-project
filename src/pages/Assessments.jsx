@@ -199,36 +199,37 @@ function ProgrammeSelect({ onSelect }) {
       {/* Banner */}
       <div style={{
         background: "linear-gradient(135deg,#103d25 0%,#1a5c38 60%,#2a7a4e 100%)",
-        borderRadius: "18px", padding: "44px 40px", marginBottom: "36px",
+        borderRadius: "16px",
+        padding: "clamp(24px,5vw,44px) clamp(20px,5vw,40px)",
+        marginBottom: "28px",
         position: "relative", overflow: "hidden",
-        boxShadow: "0 12px 40px rgba(16,61,37,0.25)",
+        boxShadow: "0 8px 32px rgba(16,61,37,0.22)",
       }}>
-        <div style={{ position:"absolute",top:"-40px",right:"-40px",width:"200px",height:"200px",borderRadius:"50%",background:"rgba(201,168,76,0.1)",pointerEvents:"none" }} />
-        <div style={{ position:"absolute",bottom:"-50px",left:"-30px",width:"160px",height:"160px",borderRadius:"50%",background:"rgba(255,255,255,0.04)",pointerEvents:"none" }} />
+        <div style={{ position:"absolute",top:"-40px",right:"-40px",width:"180px",height:"180px",borderRadius:"50%",background:"rgba(201,168,76,0.1)",pointerEvents:"none" }} />
         <div style={{
-          display:"inline-flex",alignItems:"center",gap:"8px",
+          display:"inline-flex",alignItems:"center",gap:"6px",
           background:"rgba(201,168,76,0.2)",border:"1px solid #c9a84c",
-          color:"#e8c97a",padding:"4px 14px",borderRadius:"20px",
-          fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",
-          fontFamily:"'DM Sans',sans-serif",fontWeight:600,marginBottom:"18px",
+          color:"#e8c97a",padding:"4px 12px",borderRadius:"20px",
+          fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",
+          fontFamily:"'DM Sans',sans-serif",fontWeight:600,marginBottom:"14px",
         }}>📝 Assessment Centre</div>
         <h2 style={{
           fontFamily:"'Playfair Display',serif",
-          fontSize:"clamp(20px,3vw,30px)",color:"#fff",marginBottom:"14px",lineHeight:1.3,
+          fontSize:"clamp(18px,4vw,28px)",color:"#fff",marginBottom:"12px",lineHeight:1.3,
         }}>Which programme are you applying for?</h2>
         <p style={{
-          fontFamily:"'DM Sans',sans-serif",fontSize:"15px",
-          color:"rgba(255,255,255,0.7)",maxWidth:"540px",lineHeight:1.7,
+          fontFamily:"'DM Sans',sans-serif",fontSize:"clamp(13px,3vw,15px)",
+          color:"rgba(255,255,255,0.72)",lineHeight:1.7,margin:0,
         }}>
-          Select your programme to begin. Each quiz has <strong style={{color:"#e8c97a"}}>15 questions</strong> and a <strong style={{color:"#e8c97a"}}>15-minute countdown timer</strong>. Answer all questions before time runs out!
+          Select your programme to begin. Each quiz has <strong style={{color:"#e8c97a"}}>15 questions</strong> and a <strong style={{color:"#e8c97a"}}>15-minute</strong> countdown timer.
         </p>
       </div>
 
-      {/* Programme cards — uniform hover: light grey lift */}
+      {/* Programme cards */}
       <div style={{
         display:"grid",
-        gridTemplateColumns:"repeat(auto-fill,minmax(250px,1fr))",
-        gap:"16px",
+        gridTemplateColumns:"repeat(auto-fill,minmax(min(100%,220px),1fr))",
+        gap:"14px",
       }}>
         {PROGRAMMES.map((prog, i) => {
           const d = QUIZ_DATA[prog];
@@ -241,26 +242,29 @@ function ProgrammeSelect({ onSelect }) {
               style={{
                 background: isHov ? "#f8f9fa" : "#fff",
                 border: `2px solid ${isHov ? "#d1d5db" : "#e9ecef"}`,
-                borderRadius:"14px", padding:"28px 24px", cursor:"pointer",
+                borderRadius:"14px",
+                padding:"clamp(18px,4vw,26px) clamp(16px,4vw,22px)",
+                cursor:"pointer",
                 textAlign:"left", transition:"all 0.2s ease",
-                boxShadow: isHov ? "0 8px 24px rgba(0,0,0,0.10)" : "0 2px 8px rgba(0,0,0,0.05)",
+                boxShadow: isHov ? "0 6px 20px rgba(0,0,0,0.09)" : "0 2px 6px rgba(0,0,0,0.04)",
                 transform: isHov ? "translateY(-3px)" : "none",
                 animation: `fadeUp 0.4s ease ${i*0.06}s both`,
+                width:"100%",
               }}>
-              <div style={{ fontSize:"34px",marginBottom:"14px" }}>{d.icon}</div>
+              <div style={{ fontSize:"30px",marginBottom:"12px" }}>{d.icon}</div>
               <div style={{
-                fontFamily:"'Playfair Display',serif",fontSize:"17px",marginBottom:"6px",
+                fontFamily:"'Playfair Display',serif",fontSize:"clamp(14px,3vw,17px)",marginBottom:"4px",
                 color:"#103d25",
               }}>{prog}</div>
               <div style={{
                 fontFamily:"'DM Sans',sans-serif",fontSize:"12px",
-                color:"#9ca3af",marginBottom:"16px",
+                color:"#9ca3af",marginBottom:"14px",
               }}>15 Questions · 15 Min Timer</div>
               <div style={{
-                display:"inline-flex",alignItems:"center",gap:"6px",
+                display:"inline-flex",alignItems:"center",gap:"5px",
                 background: isHov ? "#103d25" : "#f3f4f6",
                 color: isHov ? "#fff" : "#374151",
-                padding:"6px 14px",borderRadius:"20px",
+                padding:"5px 12px",borderRadius:"20px",
                 fontSize:"12px",fontFamily:"'DM Sans',sans-serif",fontWeight:700,
                 transition:"all 0.2s ease",
               }}>Start Quiz →</div>
@@ -313,7 +317,6 @@ function QuizScreen({ programme, onFinish, onBack }) {
     else { setCurrent(c => c + 1); setSelected(null); setConfirmed(false); }
   };
 
-  // Uniform option styles — grey for unselected hover, green/red only after confirm
   const optStyle = (idx) => {
     if (confirmed) {
       if (idx === q.answer)
@@ -328,58 +331,63 @@ function QuizScreen({ programme, onFinish, onBack }) {
 
   return (
     <div ref={topRef} style={{ animation:"fadeUp 0.4s ease", scrollMarginTop:"80px" }}>
-      {/* Top bar */}
+      {/* Top bar — stacks on mobile */}
       <div style={{
         display:"flex",alignItems:"center",justifyContent:"space-between",
-        flexWrap:"wrap",gap:"12px",marginBottom:"22px",
-        background:"#fff",borderRadius:"14px",padding:"14px 20px",
-        border:"1px solid #e9ecef",boxShadow:"0 2px 10px rgba(0,0,0,0.05)",
+        flexWrap:"wrap",gap:"10px",marginBottom:"18px",
+        background:"#fff",borderRadius:"14px",padding:"12px 16px",
+        border:"1px solid #e9ecef",boxShadow:"0 2px 8px rgba(0,0,0,0.04)",
       }}>
         <button onClick={onBack} style={{
           background:"none",border:"1.5px solid #e5e7eb",borderRadius:"8px",
-          padding:"7px 14px",cursor:"pointer",color:"#6b7280",
+          padding:"6px 12px",cursor:"pointer",color:"#6b7280",
           fontFamily:"'DM Sans',sans-serif",fontSize:"13px",fontWeight:500,
-          display:"flex",alignItems:"center",gap:"5px",transition:"all 0.18s",
+          display:"flex",alignItems:"center",gap:"4px",transition:"all 0.18s",
+          flexShrink:0,
         }}
-        onMouseEnter={e=>{e.currentTarget.style.background="#f8f9fa";e.currentTarget.style.borderColor="#d1d5db";}}
-        onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="#e5e7eb";}}
+        onMouseEnter={e=>{e.currentTarget.style.background="#f8f9fa";}}
+        onMouseLeave={e=>{e.currentTarget.style.background="none";}}
         >← Back</button>
 
-        <div style={{ display:"flex",alignItems:"center",gap:"8px" }}>
-          <span style={{ fontSize:"18px" }}>{d.icon}</span>
-          <span style={{ fontFamily:"'Playfair Display',serif",fontSize:"15px",color:"#103d25" }}>{programme}</span>
+        <div style={{ display:"flex",alignItems:"center",gap:"6px",flex:1,justifyContent:"center",minWidth:0 }}>
+          <span style={{ fontSize:"16px" }}>{d.icon}</span>
+          <span style={{
+            fontFamily:"'Playfair Display',serif",fontSize:"clamp(13px,3vw,15px)",
+            color:"#103d25",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",
+          }}>{programme}</span>
         </div>
 
-        {/* Timer */}
+        {/* Timer — compact on mobile */}
         <div style={{
-          display:"flex",alignItems:"center",gap:"8px",
+          display:"flex",alignItems:"center",gap:"6px",
           background:timerBg,border:`2px solid ${timerColor}40`,
-          borderRadius:"10px",padding:"8px 16px",transition:"all 0.4s",
+          borderRadius:"10px",padding:"6px 12px",transition:"all 0.4s",
+          flexShrink:0,
         }}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={timerColor} strokeWidth="2.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={timerColor} strokeWidth="2.5">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
           <span style={{
-            fontFamily:"'DM Sans',sans-serif",fontSize:"18px",fontWeight:800,
-            color:timerColor,letterSpacing:"2px",minWidth:"52px",
+            fontFamily:"'DM Sans',sans-serif",fontSize:"clamp(15px,4vw,18px)",fontWeight:800,
+            color:timerColor,letterSpacing:"1.5px",
           }}>{formatTime(timeLeft)}</span>
           {timeLeft < 120 && (
-            <span style={{ fontSize:"11px",color:"#dc2626",fontFamily:"'DM Sans',sans-serif",fontWeight:600 }}>HURRY!</span>
+            <span style={{ fontSize:"10px",color:"#dc2626",fontFamily:"'DM Sans',sans-serif",fontWeight:700 }}>!</span>
           )}
         </div>
       </div>
 
       {/* Progress */}
-      <div style={{ marginBottom:"24px" }}>
-        <div style={{ display:"flex",justifyContent:"space-between",marginBottom:"8px" }}>
-          <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7280",fontWeight:500 }}>
+      <div style={{ marginBottom:"20px" }}>
+        <div style={{ display:"flex",justifyContent:"space-between",marginBottom:"7px" }}>
+          <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#6b7280",fontWeight:500 }}>
             Question {current+1} <span style={{color:"#9ca3af"}}>of {qs.length}</span>
           </span>
-          <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#103d25",fontWeight:600 }}>
-            {Math.round((current+1)/qs.length*100)}% done
+          <span style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#103d25",fontWeight:600 }}>
+            {Math.round((current+1)/qs.length*100)}%
           </span>
         </div>
-        <div style={{ background:"#f0f0f0",borderRadius:"6px",height:"7px",overflow:"hidden" }}>
+        <div style={{ background:"#f0f0f0",borderRadius:"6px",height:"6px",overflow:"hidden" }}>
           <div style={{
             height:"100%",borderRadius:"6px",
             background:"linear-gradient(90deg,#103d25,#c9a84c)",
@@ -390,27 +398,31 @@ function QuizScreen({ programme, onFinish, onBack }) {
 
       {/* Question card */}
       <div style={{
-        background:"#fff",borderRadius:"18px",padding:"36px 32px",
-        border:"1px solid #e9ecef",boxShadow:"0 4px 20px rgba(0,0,0,0.06)",
-        marginBottom:"20px",
+        background:"#fff",borderRadius:"16px",
+        padding:"clamp(20px,5vw,36px) clamp(16px,5vw,32px)",
+        border:"1px solid #e9ecef",boxShadow:"0 4px 16px rgba(0,0,0,0.05)",
+        marginBottom:"18px",
       }}>
-        {/* Badge */}
         <div style={{
-          display:"inline-flex",alignItems:"center",gap:"6px",
+          display:"inline-flex",alignItems:"center",gap:"5px",
           background:"rgba(16,61,37,0.06)",border:"1px solid rgba(16,61,37,0.15)",
-          color:"#103d25",padding:"4px 12px",borderRadius:"20px",
+          color:"#103d25",padding:"3px 10px",borderRadius:"20px",
           fontSize:"11px",fontFamily:"'DM Sans',sans-serif",fontWeight:700,
-          letterSpacing:"1px",textTransform:"uppercase",marginBottom:"18px",
+          letterSpacing:"1px",textTransform:"uppercase",marginBottom:"14px",
         }}>Q {current+1} / {qs.length}</div>
 
         <p style={{
           fontFamily:"'Playfair Display',serif",
-          fontSize:"clamp(17px,2.5vw,21px)",
-          color:"#103d25",lineHeight:1.55,marginBottom:"28px",fontWeight:600,
+          fontSize:"clamp(16px,3.5vw,20px)",
+          color:"#103d25",lineHeight:1.55,marginBottom:"24px",fontWeight:600,
         }}>{q.q}</p>
 
-        {/* Options — uniform hover (light grey) */}
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
+        {/* Options — always single column on mobile, 2-col on wider screens */}
+        <div style={{
+          display:"grid",
+          gridTemplateColumns:"repeat(auto-fill,minmax(min(100%,260px),1fr))",
+          gap:"10px",
+        }}>
           {q.options.map((opt, idx) => {
             const s = optStyle(idx);
             const isCorrect = confirmed && idx === q.answer;
@@ -426,43 +438,45 @@ function QuizScreen({ programme, onFinish, onBack }) {
                 }}
                 onMouseLeave={e => {
                   if (!confirmed && selected !== idx) {
-                    e.currentTarget.style.background = "#fff";
-                    e.currentTarget.style.borderColor = "#e5e7eb";
+                    e.currentTarget.style.background = s.bg;
+                    e.currentTarget.style.borderColor = s.border;
                   }
                 }}
                 style={{
                   background:s.bg,border:`2px solid ${s.border}`,
-                  borderRadius:"12px",padding:"14px 16px",
+                  borderRadius:"12px",
+                  padding:"clamp(11px,3vw,14px) clamp(12px,3vw,16px)",
                   cursor:confirmed?"default":"pointer",
                   textAlign:"left",transition:"all 0.18s ease",
                   color:s.color,fontFamily:"'DM Sans',sans-serif",
-                  fontSize:"14px",fontWeight:500,
-                  display:"flex",alignItems:"center",gap:"12px",
-                  boxShadow: selected===idx && !confirmed ? "0 2px 10px rgba(0,0,0,0.08)" : "none",
+                  fontSize:"clamp(13px,3vw,14px)",fontWeight:500,
+                  display:"flex",alignItems:"center",gap:"10px",
+                  minHeight:"48px",
+                  width:"100%",
                 }}>
                 <span style={{
-                  width:"30px",height:"30px",borderRadius:"50%",flexShrink:0,
+                  width:"28px",height:"28px",borderRadius:"50%",flexShrink:0,
                   background: isCorrect?"#1a5c38":isWrong?"#dc2626":selected===idx?"#103d25":s.labelBg,
                   color: isCorrect||isWrong||selected===idx?"#fff":s.labelColor,
                   display:"flex",alignItems:"center",justifyContent:"center",
-                  fontSize:"12px",fontWeight:800,transition:"all 0.18s",fontFamily:"'DM Sans',sans-serif",
+                  fontSize:"11px",fontWeight:800,transition:"all 0.18s",fontFamily:"'DM Sans',sans-serif",
                 }}>
                   {isCorrect ? "✓" : isWrong ? "✗" : LABELS[idx]}
                 </span>
-                <span style={{ flex:1,lineHeight:1.4 }}>{opt}</span>
+                <span style={{ flex:1,lineHeight:1.4,wordBreak:"break-word" }}>{opt}</span>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Action */}
+      {/* Action row */}
       <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"12px" }}>
-        {/* Dot nav */}
-        <div style={{ display:"flex",flexWrap:"wrap",gap:"5px",maxWidth:"280px" }}>
+        {/* Dot nav — hidden on very small screens to save space */}
+        <div style={{ display:"flex",flexWrap:"wrap",gap:"5px",maxWidth:"240px" }}>
           {qs.map((_,i) => (
             <div key={i} style={{
-              width:"9px",height:"9px",borderRadius:"50%",
+              width:"8px",height:"8px",borderRadius:"50%",
               background: i < current ? "#103d25" : i===current ? "#c9a84c" : "#e5e7eb",
               transition:"background 0.3s",
             }} />
@@ -473,21 +487,23 @@ function QuizScreen({ programme, onFinish, onBack }) {
           <button onClick={confirm} disabled={selected===null} style={{
             background: selected===null ? "#f3f4f6" : "linear-gradient(135deg,#103d25,#1a5c38)",
             color: selected===null ? "#9ca3af" : "#fff",
-            border:"none",borderRadius:"10px",padding:"13px 30px",
+            border:"none",borderRadius:"10px",
+            padding:"12px clamp(20px,5vw,30px)",
             fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:700,
             cursor:selected===null?"not-allowed":"pointer",
-            boxShadow: selected!==null?"0 4px 16px rgba(16,61,37,0.3)":"none",
-            transition:"all 0.2s",
+            boxShadow: selected!==null?"0 4px 14px rgba(16,61,37,0.28)":"none",
+            transition:"all 0.2s",whiteSpace:"nowrap",
           }}>Confirm Answer</button>
         ) : (
           <button onClick={next} style={{
             background:"linear-gradient(135deg,#103d25,#1a5c38)",
-            color:"#fff",border:"none",borderRadius:"10px",padding:"13px 30px",
+            color:"#fff",border:"none",borderRadius:"10px",
+            padding:"12px clamp(20px,5vw,30px)",
             fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:700,
-            cursor:"pointer",boxShadow:"0 4px 16px rgba(16,61,37,0.35)",
-            display:"flex",alignItems:"center",gap:"8px",
+            cursor:"pointer",boxShadow:"0 4px 14px rgba(16,61,37,0.32)",
+            display:"flex",alignItems:"center",gap:"7px",whiteSpace:"nowrap",
           }}>
-            {current===qs.length-1 ? "View Results 🎯" : "Next Question →"}
+            {current===qs.length-1 ? "View Results 🎯" : "Next →"}
           </button>
         )}
       </div>
@@ -504,7 +520,7 @@ function ResultScreen({ programme, answers, onRetry, onHome }) {
   const wrong = qs.length - correct - skipped;
   const pct = Math.round((correct / qs.length) * 100);
   const res = getResult(pct);
-  const radius = 52, circ = 2 * Math.PI * radius;
+  const radius = 48, circ = 2 * Math.PI * radius;
   const dash = circ - (pct/100)*circ;
 
   return (
@@ -512,41 +528,52 @@ function ResultScreen({ programme, answers, onRetry, onHome }) {
       {/* Result hero */}
       <div style={{
         background:"linear-gradient(135deg,#103d25 0%,#1a5c38 60%,#2a7a4e 100%)",
-        borderRadius:"20px",padding:"44px 40px",marginBottom:"28px",
+        borderRadius:"18px",
+        padding:"clamp(28px,6vw,44px) clamp(20px,6vw,40px)",
+        marginBottom:"22px",
         textAlign:"center",position:"relative",overflow:"hidden",
-        boxShadow:"0 12px 40px rgba(16,61,37,0.25)",
+        boxShadow:"0 10px 36px rgba(16,61,37,0.22)",
       }}>
-        <div style={{ position:"absolute",top:"-40px",right:"-40px",width:"180px",height:"180px",borderRadius:"50%",background:"rgba(201,168,76,0.1)",pointerEvents:"none" }} />
-        <div style={{ fontSize:"52px",marginBottom:"10px" }}>{res.emoji}</div>
-        <h2 style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(22px,3vw,32px)",color:"#fff",marginBottom:"10px" }}>
+        <div style={{ position:"absolute",top:"-40px",right:"-40px",width:"160px",height:"160px",borderRadius:"50%",background:"rgba(201,168,76,0.1)",pointerEvents:"none" }} />
+        <div style={{ fontSize:"clamp(36px,8vw,52px)",marginBottom:"8px" }}>{res.emoji}</div>
+        <h2 style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(20px,5vw,30px)",color:"#fff",marginBottom:"10px" }}>
           {res.grade}
         </h2>
 
         {/* Circular gauge */}
-        <div style={{ display:"flex",justifyContent:"center",margin:"20px 0" }}>
-          <svg width="130" height="130">
-            <circle cx="65" cy="65" r={radius} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="11"/>
-            <circle cx="65" cy="65" r={radius} fill="none"
-              stroke="#c9a84c" strokeWidth="11"
+        <div style={{ display:"flex",justifyContent:"center",margin:"16px 0" }}>
+          <svg width="120" height="120">
+            <circle cx="60" cy="60" r={radius} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="10"/>
+            <circle cx="60" cy="60" r={radius} fill="none"
+              stroke="#c9a84c" strokeWidth="10"
               strokeDasharray={circ} strokeDashoffset={dash}
               strokeLinecap="round"
-              transform="rotate(-90 65 65)"
+              transform="rotate(-90 60 60)"
               style={{ transition:"stroke-dashoffset 1.5s ease" }}
             />
-            <text x="65" y="60" textAnchor="middle" fill="#fff" fontSize="22" fontWeight="800"
+            <text x="60" y="56" textAnchor="middle" fill="#fff" fontSize="20" fontWeight="800"
               fontFamily="Playfair Display,serif">{pct}%</text>
-            <text x="65" y="78" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="11"
+            <text x="60" y="73" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="11"
               fontFamily="DM Sans,sans-serif">{correct}/{qs.length}</text>
           </svg>
         </div>
 
-        <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"15px",color:"rgba(255,255,255,0.82)",lineHeight:1.75,maxWidth:"500px",margin:"0 auto" }}>
+        <p style={{
+          fontFamily:"'DM Sans',sans-serif",
+          fontSize:"clamp(13px,3vw,15px)",
+          color:"rgba(255,255,255,0.82)",lineHeight:1.75,
+          maxWidth:"460px",margin:"0 auto",
+        }}>
           {res.msg}
         </p>
       </div>
 
-      {/* Score pills */}
-      <div style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"14px",marginBottom:"28px" }}>
+      {/* Score pills — 2x2 on mobile, 4-col on wider */}
+      <div style={{
+        display:"grid",
+        gridTemplateColumns:"repeat(2,1fr)",
+        gap:"12px",marginBottom:"24px",
+      }}>
         {[
           { label:"Correct", val:correct, color:"#1a5c38", bg:"rgba(26,92,56,0.08)", border:"rgba(26,92,56,0.2)" },
           { label:"Wrong",   val:wrong,   color:"#dc2626", bg:"rgba(220,38,38,0.08)", border:"rgba(220,38,38,0.2)" },
@@ -555,45 +582,47 @@ function ResultScreen({ programme, answers, onRetry, onHome }) {
         ].map(p => (
           <div key={p.label} style={{
             background:p.bg,border:`1.5px solid ${p.border}`,
-            borderRadius:"14px",padding:"18px 12px",textAlign:"center",
+            borderRadius:"14px",padding:"16px 10px",textAlign:"center",
           }}>
-            <div style={{ fontFamily:"'Playfair Display',serif",fontSize:"26px",color:p.color,fontWeight:700 }}>{p.val}</div>
-            <div style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#9ca3af",marginTop:"4px",textTransform:"uppercase",letterSpacing:"0.5px" }}>{p.label}</div>
+            <div style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(22px,5vw,26px)",color:p.color,fontWeight:700 }}>{p.val}</div>
+            <div style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"11px",color:"#9ca3af",marginTop:"4px",textTransform:"uppercase",letterSpacing:"0.5px" }}>{p.label}</div>
           </div>
         ))}
       </div>
 
       {/* Answer review */}
-      <div style={{ marginBottom:"32px" }}>
-        <h3 style={{ fontFamily:"'Playfair Display',serif",fontSize:"20px",color:"#103d25",marginBottom:"16px",display:"flex",alignItems:"center",gap:"10px" }}>
+      <div style={{ marginBottom:"28px" }}>
+        <h3 style={{ fontFamily:"'Playfair Display',serif",fontSize:"clamp(17px,4vw,20px)",color:"#103d25",marginBottom:"14px" }}>
           📋 Answer Review
         </h3>
-        <div style={{ display:"flex",flexDirection:"column",gap:"10px" }}>
+        <div style={{ display:"flex",flexDirection:"column",gap:"9px" }}>
           {qs.map((q,i) => {
             const ua = answers[i];
             const ok = ua === q.answer;
             const sk = ua === null;
             return (
               <div key={i} style={{
-                background:"#fff",borderRadius:"12px",padding:"16px 20px",
+                background:"#fff",borderRadius:"12px",
+                padding:"clamp(12px,3vw,16px) clamp(14px,4vw,20px)",
                 border:`1.5px solid ${ok?"rgba(26,92,56,0.2)":sk?"#e5e7eb":"rgba(220,38,38,0.2)"}`,
-                display:"flex",gap:"12px",alignItems:"flex-start",
+                display:"flex",gap:"10px",alignItems:"flex-start",
               }}>
                 <div style={{
-                  width:"30px",height:"30px",borderRadius:"50%",flexShrink:0,
+                  width:"28px",height:"28px",borderRadius:"50%",flexShrink:0,
                   background: ok?"rgba(26,92,56,0.1)":sk?"rgba(107,114,128,0.1)":"rgba(220,38,38,0.1)",
                   display:"flex",alignItems:"center",justifyContent:"center",fontSize:"13px",
+                  marginTop:"1px",
                 }}>
                   {ok?"✅":sk?"⏭️":"❌"}
                 </div>
-                <div style={{ flex:1 }}>
-                  <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"13.5px",color:"#374151",marginBottom:"5px",fontWeight:500 }}>
+                <div style={{ flex:1,minWidth:0 }}>
+                  <p style={{ fontFamily:"'DM Sans',sans-serif",fontSize:"clamp(12px,3vw,13.5px)",color:"#374151",marginBottom:"5px",fontWeight:500,lineHeight:1.45 }}>
                     Q{i+1}. {q.q}
                   </p>
-                  <div style={{ display:"flex",gap:"16px",flexWrap:"wrap" }}>
+                  <div style={{ display:"flex",gap:"10px",flexWrap:"wrap" }}>
                     {!sk && !ok && (
                       <span style={{ fontSize:"12px",color:"#dc2626",fontFamily:"'DM Sans',sans-serif" }}>
-                        ✗ Your answer: {q.options[ua]}
+                        ✗ Your: {q.options[ua]}
                       </span>
                     )}
                     <span style={{ fontSize:"12px",color:"#1a5c38",fontFamily:"'DM Sans',sans-serif",fontWeight:500 }}>
@@ -607,27 +636,28 @@ function ResultScreen({ programme, answers, onRetry, onHome }) {
         </div>
       </div>
 
-      {/* CTA */}
-      <div style={{ display:"flex",gap:"14px",flexWrap:"wrap",justifyContent:"center" }}>
+      {/* CTA buttons */}
+      <div style={{ display:"flex",gap:"12px",flexWrap:"wrap",justifyContent:"center" }}>
         <button onClick={onRetry}
           onMouseEnter={e=>{e.currentTarget.style.opacity="0.9";e.currentTarget.style.transform="translateY(-2px)";}}
           onMouseLeave={e=>{e.currentTarget.style.opacity="1";e.currentTarget.style.transform="none";}}
           style={{
             background:"linear-gradient(135deg,#103d25,#1a5c38)",
-            color:"#fff",border:"none",borderRadius:"10px",padding:"13px 28px",
+            color:"#fff",border:"none",borderRadius:"10px",
+            padding:"12px clamp(18px,5vw,28px)",
             fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:700,
-            cursor:"pointer",boxShadow:"0 4px 16px rgba(16,61,37,0.3)",
-            transition:"all 0.2s",
-          }}>🔄 Retry This Quiz</button>
+            cursor:"pointer",boxShadow:"0 4px 14px rgba(16,61,37,0.28)",
+            transition:"all 0.2s",flex:"1",minWidth:"140px",maxWidth:"220px",
+          }}>🔄 Retry Quiz</button>
         <button onClick={onHome}
           onMouseEnter={e=>{e.currentTarget.style.background="#f8f9fa";}}
           onMouseLeave={e=>{e.currentTarget.style.background="#fff";}}
           style={{
             background:"#fff",color:"#103d25",border:"2px solid #103d25",
-            borderRadius:"10px",padding:"13px 28px",
+            borderRadius:"10px",padding:"12px clamp(18px,5vw,28px)",
             fontFamily:"'DM Sans',sans-serif",fontSize:"14px",fontWeight:600,
-            cursor:"pointer",transition:"all 0.2s",
-          }}>🏠 Choose Another Programme</button>
+            cursor:"pointer",transition:"all 0.2s",flex:"1",minWidth:"140px",maxWidth:"220px",
+          }}>🏠 All Programmes</button>
       </div>
     </div>
   );
@@ -654,11 +684,12 @@ export default function Assessments({ navigate }) {
   return (
     <PageLayout navigate={navigate} icon="📝" title="Assessments" breadcrumb="Assessments">
       <style>{`
-        @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @media(max-width:580px){
-          .opt-grid{grid-template-columns:1fr !important;}
-          .score-pills{grid-template-columns:repeat(2,1fr) !important;}
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
+        * { box-sizing: border-box; }
+        button { -webkit-tap-highlight-color: transparent; }
       `}</style>
       <div ref={pageTopRef} style={{ scrollMarginTop:"80px" }} />
       {step==="select" && <ProgrammeSelect onSelect={handleSelect} />}
