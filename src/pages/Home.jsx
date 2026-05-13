@@ -4,7 +4,7 @@ import fg1 from "../img/fg1.jpeg";
 import fg2 from "../img/fg2.jpeg";
 
 import principalImg from "../img/principal.jpeg";
-import bsCoordImg from "../img/Bscoordinator.jpeg";
+import bsCoordImg from "../img/Zafar2.jpeg";
 import hodImg from "../img/HOD.jpeg";
 import seniorProfImg from "../img/Seniorprofessor.jpeg"; 
 
