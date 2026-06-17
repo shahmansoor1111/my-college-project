@@ -2,19 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import Footer from "../components/Footer";
 import fg1 from "../img/fg1.jpeg";
 import fg2 from "../img/fg2.jpeg";
-
 import principalImg from "../img/principal.jpeg";
 import bsCoordImg from "../img/Zafar3.jpeg";
 import hodImg from "../img/HOD.jpeg";
 import seniorProfImg from "../img/Seniorprofessor.jpeg"; 
-
 import galleryImg1 from "../img/gall1.jpeg";
 import galleryImg2 from "../img/gall2.jpeg";
 import galleryImg3 from "../img/gall3.jpeg";
 import galleryImg4 from "../img/gall4.jpeg";
-
-
-
 import galleryVid1 from "../img/gall5.mp4";
 import galleryVid2 from "../img/gall6.mp4";
 
