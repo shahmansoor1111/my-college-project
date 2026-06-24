@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useSession } from "../context/SessionContext";
-
+import CommunityBadge, { CommunityBadgeNumber } from "./community/CommunityBadge";
 function getNavLinks(goToDashboard) {
   const links = [
     { label: "Home", page: "home" },
@@ -36,16 +36,17 @@ function getNavLinks(goToDashboard) {
     },
     { label: "Courses",     page: "courses"     },
     { label: "Assessments", page: "assessments" },
+    { label: "Community",   page: "community"   },
+    { label: "AI Tutor",   page: "ai-helper"   },
+    { label: "Gallery", page: "gallery" },
+    // ✅ FIX: One "Dashboard" dropdown instead of two separate navbar buttons
     {
-      label: "AI Tutor",
+      label: "Dashboard",
       dropdown: [
-        { label: "🤖 AI Helper",     page: "ai-helper"     },
-        { label: "📝 AI Assessment", page: "ai-assessment" },
+        { label: "🧑‍🏫 Teacher Dashboard", action: () => goToDashboard("teacher") },
+        { label: "🎓 Student Dashboard",  action: () => goToDashboard("student") },
       ],
     },
-    { label: "Gallery", page: "gallery" },
-    { label: "🧑‍🏫 Teacher Dashboard", action: () => goToDashboard("teacher") },
-    { label: "🎓 Student Dashboard",  action: () => goToDashboard("student") },
     { label: "Contact Us", page: "contact", highlight: true },
   ];
   return links;
@@ -197,7 +198,8 @@ function NavItem({ item, currentPage, navigate, closeMobile }) {
       fontFamily: "'DM Sans', sans-serif", fontSize: "14px",
       fontWeight: item.highlight ? 700 : 500,
       padding: item.highlight ? "8px 18px" : "8px 14px",
-      borderRadius: "7px", transition: "all 0.2s", whiteSpace: "nowrap",
+    borderRadius: "7px", transition: "all 0.2s", whiteSpace: "nowrap",
+      position: "relative",
     }}
       onMouseEnter={e => {
         if (!item.highlight) { e.currentTarget.style.color = "#e8c97a"; e.currentTarget.style.background = "rgba(255,255,255,0.1)"; }
@@ -209,6 +211,7 @@ function NavItem({ item, currentPage, navigate, closeMobile }) {
       }}
     >
       {item.label}
+      {item.page === "community" && <CommunityBadge />}
     </button>
   );
 }
@@ -219,7 +222,7 @@ function MobileItem({ item, navigate, close }) {
   if (item.action) {
     return (
       <button onClick={() => { item.action(); close(); }} style={{
-        width: "100%", padding: "13px 24px", background: "rgba(232,201,122,0.1)",
+        width: "100%", padding: "13px 40px", background: "rgba(232,201,122,0.08)",
         border: "none", color: "#e8c97a", fontFamily: "'DM Sans',sans-serif",
         fontSize: "14px", fontWeight: 600, cursor: "pointer", textAlign: "left",
         borderBottom: "1px solid rgba(255,255,255,0.05)",
@@ -228,14 +231,26 @@ function MobileItem({ item, navigate, close }) {
   }
 
   if (item.page) {
-    return (
-      <button onClick={() => { navigate(item.page); close(); }} style={{
-        width: "100%", padding: "13px 40px", background: "none", border: "none",
-        color: "#a8d5be", fontFamily: "'DM Sans',sans-serif", fontSize: "14px",
-        cursor: "pointer", textAlign: "left", borderBottom: "1px solid rgba(255,255,255,0.05)",
-      }}>{item.label}</button>
-    );
-  }
+  return (
+    <button onClick={() => { navigate(item.page); close(); }} style={{
+      width: "100%", padding: "13px 40px", background: "none", border: "none",
+      color: "#a8d5be", fontFamily: "'DM Sans',sans-serif", fontSize: "14px",
+      cursor: "pointer", textAlign: "left", borderBottom: "1px solid rgba(255,255,255,0.05)",
+      display: "flex", alignItems: "center", gap: "8px",
+    }}>
+      {item.label}
+      {item.page === "community" && (
+        <span style={{
+          minWidth: "18px", height: "18px", padding: "0 4px", borderRadius: "9px",
+          background: "#dc2626", color: "#fff", fontSize: "11px", fontWeight: 700,
+          lineHeight: "18px", textAlign: "center", display: "inline-block",
+        }}>
+          <CommunityBadgeNumber />
+        </span>
+      )}
+    </button>
+  );
+}
 
   if (item.submenu) {
     return (
@@ -267,6 +282,7 @@ function MobileItem({ item, navigate, close }) {
       </div>
     );
   }
+
   return null;
 }
 
@@ -277,8 +293,7 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
   const NAV_LINKS = getNavLinks(goToDashboard);
   const closeAll = () => { setMobileOpen(false); setMobileExpanded(null); };
 
-  // Show sign out button if anyone is logged in
-  const isLoggedIn = teacher || student;
+  const isLoggedIn    = teacher || student;
   const whoIsLoggedIn = teacher ? `👨‍🏫 ${teacher.name}` : student ? `🎓 ${student.full_name}` : null;
 
   function handleSignOut() {
@@ -343,25 +358,7 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
             <NavItem key={i} item={item} currentPage={currentPage} navigate={navigate} />
           ))}
 
-          {/* Show who is logged in + sign out */}
-          {isLoggedIn && (
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "8px" }}>
-              <span style={{ fontSize: "12px", color: "#e8c97a", fontFamily: "'DM Sans',sans-serif", whiteSpace: "nowrap" }}>
-                {whoIsLoggedIn}
-              </span>
-              <button onClick={handleSignOut} style={{
-                background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
-                cursor: "pointer", color: "#f87171", fontFamily: "'DM Sans', sans-serif",
-                fontSize: "13px", fontWeight: 600, padding: "7px 14px", borderRadius: "7px",
-                transition: "all 0.2s",
-              }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(248,113,113,0.2)"}
-                onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
-              >
-                🚪 Sign Out
-              </button>
-            </div>
-          )}
+
         </div>
 
         {/* Hamburger */}
@@ -384,13 +381,7 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
           boxShadow: "0 12px 30px rgba(0,0,0,0.3)",
           maxHeight: "calc(100vh - 72px)", overflowY: "auto",
         }}>
-          {isLoggedIn && (
-            <div style={{ padding: "12px 24px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.2)" }}>
-              <span style={{ fontSize: "13px", color: "#e8c97a", fontFamily: "'DM Sans',sans-serif" }}>
-                {whoIsLoggedIn}
-              </span>
-            </div>
-          )}
+
           {NAV_LINKS.map((item, i) => (
             <div key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
               {item.dropdown ? (
@@ -423,14 +414,7 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
               )}
             </div>
           ))}
-          {isLoggedIn && (
-            <button onClick={handleSignOut} style={{
-              width: "100%", padding: "16px 24px", background: "none", border: "none",
-              color: "#f87171", fontFamily: "'DM Sans',sans-serif", fontSize: "15px",
-              fontWeight: 600, cursor: "pointer", textAlign: "left",
-              borderTop: "1px solid rgba(255,255,255,0.1)",
-            }}>🚪 Sign Out</button>
-          )}
+
         </div>
       )}
     </>

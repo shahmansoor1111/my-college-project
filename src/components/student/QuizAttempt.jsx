@@ -13,12 +13,33 @@ export default function QuizAttempt({ quizId, navigate }) {
   const [error,       setError]       = useState(null);
   const [alreadyDone, setAlreadyDone] = useState(false);
 
+  // ⏱️ Timer aur Navigation ke liye nai States
+  const [currentIndex, setCurrentIndex] = useState(0); 
+  const [timeLeft, setTimeLeft]         = useState(10);
+
   useEffect(() => { if (student) fetchData(); }, [quizId, student]);
+
+  // ⏱️ Timer Logic: Har question ke liye 10 seconds
+  useEffect(() => {
+    if (loading || alreadyDone || questions.length === 0 || submitting) return;
+
+    // Agar time khatam ho jaye toh agle question par jao
+    if (timeLeft === 0) {
+      handleNextQuestion();
+      return;
+    }
+
+    // Har 1 second baad timer kam karein
+    const timerId = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timerId);
+  }, [timeLeft, currentIndex, loading, questions]);
 
   async function fetchData() {
     setLoading(true);
 
-    // Check if already submitted
     const { data: existing } = await supabase
       .from("submissions").select("id")
       .eq("quiz_id", quizId).eq("student_id", student.id).maybeSingle();
@@ -37,18 +58,24 @@ export default function QuizAttempt({ quizId, navigate }) {
     setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
   }
 
-  async function handleSubmit() {
-    const answered = Object.keys(answers).length;
-    if (answered < questions.length) {
-      if (!confirm(`You answered ${answered} of ${questions.length} questions. Submit anyway?`)) return;
+  // Next question par jaane ki logic ya auto-submit
+  function handleNextQuestion() {
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+      setTimeLeft(10); // Agle question ke liye timer dobara 10 par reset
+    } else {
+      // Agar aakhri question tha aur time up ho gaya, toh direct submit karlein
+      autoSubmit();
     }
+  }
 
+  // Bina confirmation ke direct submit (Timer khatam hone ki surat mein)
+  async function autoSubmit(finalAnswers = answers) {
     setSubmitting(true);
     setError(null);
 
-    // Calculate score — answer stored as string so compare carefully
     const score = questions.reduce((acc, q) =>
-      acc + (answers[q.id] === parseInt(q.answer) ? 1 : 0), 0);
+      acc + (finalAnswers[q.id] === parseInt(q.answer) ? 1 : 0), 0);
 
     const { error: insertError } = await supabase.from("submissions").insert({
       quiz_id:          quizId,
@@ -61,7 +88,6 @@ export default function QuizAttempt({ quizId, navigate }) {
 
     if (insertError) { setError(insertError.message); setSubmitting(false); return; }
 
-    // Notify the teacher via notifications table
     if (quiz?.teacher_id) {
       await supabase.from("notifications").insert({
         student_id:      student.id,
@@ -76,6 +102,12 @@ export default function QuizAttempt({ quizId, navigate }) {
     navigate(`student-quiz-results/${quizId}`);
   }
 
+  // Manually button click kar ke submit karne ke liye
+  async function handleSubmit() {
+    if (!confirm("Are you sure you want to submit the quiz?")) return;
+    autoSubmit(answers);
+  }
+
   if (loading) return <LoadingSpinner label="Loading quiz..." />;
 
   if (alreadyDone) return (
@@ -88,60 +120,85 @@ export default function QuizAttempt({ quizId, navigate }) {
     </div>
   );
 
-  if (!quiz) return (
+  if (!quiz || questions.length === 0) return (
     <div style={pageWrap}>
-      <p style={{ textAlign: "center", color: "#6b7280" }}>Quiz not found.</p>
+      <p style={{ textAlign: "center", color: "#6b7280" }}>Quiz or questions not found.</p>
     </div>
   );
+
+  // Sirf maujooda (Current) question nikalein
+  const currentQuestion = questions[currentIndex];
 
   return (
     <div style={pageWrap}>
       <div style={{ maxWidth: "680px", margin: "0 auto", padding: "0 24px" }}>
-        <button onClick={() => navigate("student-dashboard")} style={backBtn}>← Back to Dashboard</button>
+        
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "24px", color: "#103d25", margin: 0 }}>
+            {quiz.title}
+          </h1>
+          {/* ⏱️ Visual Timer Counter */}
+          <div style={{ 
+            background: timeLeft <= 3 ? "#fee2e2" : "#103d25", 
+            color: timeLeft <= 3 ? "#dc2626" : "#fff", 
+            padding: "8px 16px", borderRadius: "20px", 
+            fontWeight: "bold", fontSize: "14px",
+            border: timeLeft <= 3 ? "1px solid #fca5a5" : "none"
+          }}>
+            ⏱️ Time Left: {timeLeft}s
+          </div>
+        </div>
 
-        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "28px", color: "#103d25", marginBottom: "4px" }}>
-          {quiz.title}
-        </h1>
-        {quiz.description && <p style={{ color: "#6b7280", fontSize: "14px", marginBottom: "8px" }}>{quiz.description}</p>}
         <p style={{ color: "#9ca3af", fontSize: "12.5px", marginBottom: "28px" }}>
-          {questions.length} questions · Answered: {Object.keys(answers).length} / {questions.length}
+          Question {currentIndex + 1} of {questions.length} · Answered: {Object.keys(answers).length} / {questions.length}
         </p>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {questions.map((q, idx) => (
-            <div key={q.id} style={{ background: "#fff", borderRadius: "10px", padding: "18px 20px", border: "1px solid #eee" }}>
-              <div style={{ fontWeight: 600, color: "#1a1a1a", fontSize: "14.5px", marginBottom: "12px" }}>
-                {idx + 1}. {q.question}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {q.options.map((opt, i) => {
-                  const selected = answers[q.id] === i;
-                  return (
-                    <label key={i} style={{
-                      display: "flex", alignItems: "center", gap: "10px",
-                      padding: "10px 14px", borderRadius: "8px", cursor: "pointer",
-                      border:      selected ? "2px solid #103d25" : "1px solid #e5e7eb",
-                      background:  selected ? "#f0f7f3" : "#fafafa",
-                      fontSize: "13.5px", color: "#1a1a1a",
-                    }}>
-                      <input type="radio" name={`q-${q.id}`} checked={selected}
-                        onChange={() => selectAnswer(q.id, i)}
-                        style={{ accentColor: "#103d25", width: "16px", height: "16px" }} />
-                      <span><strong>{String.fromCharCode(65 + i)}.</strong> {opt}</span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+        {/* Sirf single current question render hoga */}
+        <div style={{ background: "#fff", borderRadius: "10px", padding: "20px 24px", border: "1px solid #eee", boxShadow: "0 2px 8px rgba(0,0,0,0.02)" }}>
+          <div style={{ fontWeight: 600, color: "#1a1a1a", fontSize: "16px", marginBottom: "16px" }}>
+            {currentIndex + 1}. {currentQuestion.question}
+          </div>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {currentQuestion.options.map((opt, i) => {
+              const selected = answers[currentQuestion.id] === i;
+              return (
+                <label key={i} style={{
+                  display: "flex", alignItems: "center", gap: "10px",
+                  padding: "12px 14px", borderRadius: "8px", cursor: "pointer",
+                  border:      selected ? "2px solid #103d25" : "1px solid #e5e7eb",
+                  background:  selected ? "#f0f7f3" : "#fafafa",
+                  fontSize: "14px", color: "#1a1a1a",
+                  transition: "all 0.2s ease"
+                }}>
+                  <input 
+                    type="radio" 
+                    name={`q-${currentQuestion.id}`} 
+                    checked={selected}
+                    onChange={() => selectAnswer(currentQuestion.id, i)}
+                    style={{ accentColor: "#103d25", width: "16px", height: "16px" }} 
+                  />
+                  <span><strong>{String.fromCharCode(65 + i)}.</strong> {opt}</span>
+                </label>
+              );
+            })}
+          </div>
         </div>
 
         {error && <p style={{ color: "#dc2626", fontSize: "13px", marginTop: "16px" }}>{error}</p>}
 
-        <button onClick={handleSubmit} disabled={submitting || questions.length === 0}
-          style={{ ...primaryBtn, marginTop: "24px", opacity: submitting ? 0.6 : 1 }}>
-          {submitting ? "Submitting..." : "Submit Quiz"}
-        </button>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "24px" }}>
+          {currentIndex < questions.length - 1 ? (
+            <button onClick={handleNextQuestion} style={primaryBtn}>
+              Next Question →
+            </button>
+          ) : (
+            <button onClick={handleSubmit} disabled={submitting} style={{ ...primaryBtn, background: "#16a34a" }}>
+              {submitting ? "Submitting..." : "Finish & Submit Quiz"}
+            </button>
+          )}
+        </div>
+
       </div>
     </div>
   );

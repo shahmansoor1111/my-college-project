@@ -29,6 +29,13 @@ export default function QuestionEditor({ quizId, navigate }) {
     setOptions(prev => prev.map((o, i) => i === index ? value : o));
   }
 
+  function selectCorrectOption(index) {
+    setCorrectOption(index);
+    // Clear a stale "select the correct answer" error the instant it's resolved,
+    // instead of waiting for the next submit attempt.
+    setError(prevError => prevError === "Please select the correct answer." ? null : prevError);
+  }
+
   function resetForm() {
     setQuestionText("");
     setOptions(["", "", "", ""]);
@@ -210,7 +217,7 @@ export default function QuestionEditor({ quizId, navigate }) {
                       padding: "10px 14px", borderRadius: "8px", cursor: "pointer",
                       border:      isSelected ? "2px solid #103d25" : "1.5px solid #e5e7eb",
                       background:  isSelected ? "#f0f7f3" : "#fafafa",
-                    }} onClick={() => setCorrectOption(i)}>
+                    }} onClick={() => selectCorrectOption(i)}>
                       <div style={{
                         width: "20px", height: "20px", borderRadius: "50%", flexShrink: 0,
                         border:     isSelected ? "6px solid #103d25" : "2px solid #d1d5db",
@@ -221,7 +228,7 @@ export default function QuestionEditor({ quizId, navigate }) {
                       </span>
                       <input type="text" placeholder={`Option ${String.fromCharCode(65 + i)}`}
                         value={opt}
-                        onChange={e => { e.stopPropagation(); updateOption(i, e.target.value); }}
+                        onChange={e => updateOption(i, e.target.value)}
                         onClick={e => e.stopPropagation()}
                         style={{ flex: 1, border: "none", background: "none", outline: "none", fontSize: "14px", fontFamily: "'DM Sans', sans-serif", color: "#1a1a1a" }} />
                       {isSelected && (

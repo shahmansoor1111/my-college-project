@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { SessionProvider, useSession } from "./context/SessionContext";
+import { CommunityProvider } from "./context/CommunityContext";
+import { CommunityIdentityProvider } from "./context/CommunityIdentity";
 import Navbar from "./components/Navbar";
 import LoadingSpinner from "./components/shared/LoadingSpinner";
 
@@ -22,7 +24,9 @@ import AIAssessment from "./pages/AIAssessment";
 import Gallery      from "./pages/Gallery";
 import Contact      from "./pages/Contact";
 import Auth         from "./pages/Auth";
-
+import Community            from "./pages/Community";
+import CommunityPostDetail  from "./pages/CommunityPostDetail";
+import CreatePost           from "./pages/CreatePost";
 // LMS pages
 import TeacherDashboard  from "./pages/TeacherDashboard";
 import StudentDashboard  from "./pages/StudentDashboard";
@@ -40,6 +44,8 @@ const STATIC_PAGES = {
   courses: Courses, assessments: Assessments,
   "ai-helper": AIHelper, "ai-assessment": AIAssessment,
   gallery: Gallery, contact: Contact, auth: Auth,
+  community: Community,
+  "create-post": CreatePost,
 };
 
 function AppContent() {
@@ -100,6 +106,8 @@ function AppContent() {
         return student
           ? <ResultsView quizId={param} navigate={navigate} />
           : <StudentOnboarding navigate={navigate} />;
+           case "community-post":
+       return <CommunityPostDetail quizId={param} navigate={navigate} />;
 
       default: {
         const PageComponent = STATIC_PAGES[route] || Home;
@@ -121,7 +129,11 @@ function AppContent() {
 export default function App() {
   return (
     <SessionProvider>
-      <AppContent />
+      <CommunityIdentityProvider>
+      <CommunityProvider>
+        <AppContent />
+       </CommunityProvider>
+     </CommunityIdentityProvider>
     </SessionProvider>
   );
 }

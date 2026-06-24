@@ -8,8 +8,21 @@ const DEPARTMENTS = [
 ];
 const SEMESTERS = ["1","2","3","4","5","6","7","8"];
 
+function useIsMobile(breakpoint = 720) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= breakpoint : false
+  );
+  useEffect(() => {
+    function handleResize() { setIsMobile(window.innerWidth <= breakpoint); }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function TeacherDashboard({ navigate }) {
   const { teacher, logoutTeacher } = useSession();
+  const isMobile = useIsMobile();
   const [quizzes,    setQuizzes]    = useState([]);
   const [loading,    setLoading]    = useState(true);
   const [title,      setTitle]      = useState("");
@@ -256,52 +269,92 @@ export default function TeacherDashboard({ navigate }) {
                     <div style={{ fontSize: "13px", color: "#6b7280", marginTop: "4px" }}>{quiz.description}</div>
                   )}
 
-                
-                {/* Submissions table */}
-{quiz.submissions?.length > 0 && (
-  <div style={{ marginTop: "14px" }}>
-    <div style={{ fontSize: "12px", fontWeight: 700, color: "#374151", marginBottom: "8px" }}>
-      📊 Submissions ({quiz.submissions.length})
-    </div>
-    <div style={{ overflowX: "auto", borderRadius: "10px", border: "1px solid #eee" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
-        <thead>
-          <tr style={{ background: "#103d25" }}>
-            <th style={thStyle}>Student Name</th>
-            <th style={thStyle}>Enrollment no</th>
-            <th style={thStyle}>Department</th>
-            <th style={thStyle}>Semester</th>
-            <th style={{ ...thStyle, textAlign: "right" }}>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {quiz.submissions.map((sub, i) => {
-            const pct = sub.total_marks ? Math.round((sub.score / sub.total_marks) * 100) : 0;
-            return (
-              <tr key={sub.id || i} style={{ background: i % 2 === 0 ? "#fff" : "#fafafa" }}>
-                <td style={tdStyle}>
-                  <span style={{ fontWeight: 600, color: "#1a1a1a" }}>👤 {sub.student_name}</span>
-                </td>
-                <td style={tdStyle}>{sub.enrollment_number}</td>
-                <td style={tdStyle}>{quiz.target_department}</td>
-                <td style={tdStyle}>Semester {quiz.target_semester}</td>
-                <td style={{ ...tdStyle, textAlign: "right" }}>
-                  <span style={{
-                    background: pct >= 50 ? "#dcfce7" : "#fef2f2",
-                    color:      pct >= 50 ? "#16a34a" : "#dc2626",
-                    fontWeight: 700, padding: "3px 10px", borderRadius: "20px", fontSize: "12px",
-                  }}>
-                    {sub.score}/{sub.total_marks} · {pct}%
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  </div>
-)}
+                {/* Submissions */}
+                {quiz.submissions?.length > 0 && (
+                  <div style={{ marginTop: "18px" }}>
+                    <div style={{ fontSize: "12.5px", fontWeight: 700, color: "#374151", marginBottom: "10px" }}>
+                      📊 Submissions ({quiz.submissions.length})
+                    </div>
+
+                    {isMobile ? (
+                      /* Mobile: stacked cards, no horizontal scroll/squeeze */
+                      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                        {quiz.submissions.map((sub, i) => {
+                          const pct = sub.total_marks ? Math.round((sub.score / sub.total_marks) * 100) : 0;
+                          return (
+                            <div key={sub.id || i} style={subCardMobile}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
+                                <span style={{ fontWeight: 700, color: "#1a1a1a", fontSize: "14px" }}>
+                                  👤 {sub.student_name}
+                                </span>
+                                <span style={{
+                                  background: pct >= 50 ? "#dcfce7" : "#fef2f2",
+                                  color:      pct >= 50 ? "#16a34a" : "#dc2626",
+                                  fontWeight: 700, padding: "4px 12px", borderRadius: "20px", fontSize: "12.5px", whiteSpace: "nowrap",
+                                }}>
+                                  {sub.score}/{sub.total_marks} · {pct}%
+                                </span>
+                              </div>
+                              <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "6px" }}>
+                                <div style={mobileRow}>
+                                  <span style={mobileLabel}>Enrollment no</span>
+                                  <span style={mobileValue}>{sub.enrollment_number}</span>
+                                </div>
+                                <div style={mobileRow}>
+                                  <span style={mobileLabel}>Department</span>
+                                  <span style={mobileValue}>{quiz.target_department}</span>
+                                </div>
+                                <div style={mobileRow}>
+                                  <span style={mobileLabel}>Semester</span>
+                                  <span style={mobileValue}>Semester {quiz.target_semester}</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      /* Desktop: roomier table with clear column spacing */
+                      <div style={{ overflowX: "auto", borderRadius: "12px", border: "1px solid #eee" }}>
+                        <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "14px", minWidth: "640px" }}>
+                          <thead>
+                            <tr style={{ background: "#103d25" }}>
+                              <th style={thStyle}>Student Name</th>
+                              <th style={thStyle}>Enrollment No</th>
+                              <th style={thStyle}>Department</th>
+                              <th style={thStyle}>Semester</th>
+                              <th style={{ ...thStyle, textAlign: "right" }}>Score</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {quiz.submissions.map((sub, i) => {
+                              const pct = sub.total_marks ? Math.round((sub.score / sub.total_marks) * 100) : 0;
+                              return (
+                                <tr key={sub.id || i} style={{ background: i % 2 === 0 ? "#fff" : "#fafafa" }}>
+                                  <td style={tdStyle}>
+                                    <span style={{ fontWeight: 600, color: "#1a1a1a" }}>👤 {sub.student_name}</span>
+                                  </td>
+                                  <td style={tdStyle}>{sub.enrollment_number}</td>
+                                  <td style={tdStyle}>{quiz.target_department}</td>
+                                  <td style={tdStyle}>Semester {quiz.target_semester}</td>
+                                  <td style={{ ...tdStyle, textAlign: "right" }}>
+                                    <span style={{
+                                      background: pct >= 50 ? "#dcfce7" : "#fef2f2",
+                                      color:      pct >= 50 ? "#16a34a" : "#dc2626",
+                                      fontWeight: 700, padding: "5px 14px", borderRadius: "20px", fontSize: "13px",
+                                    }}>
+                                      {sub.score}/{sub.total_marks} · {pct}%
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                )}
                 </div>
 
                 <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "flex-start" }}>
@@ -333,13 +386,17 @@ const pageWrap   = { minHeight: "100vh", background: "#faf7f0", paddingTop: "100
 const sectionHead = { fontSize: "17px", color: "#103d25", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px" };
 const badge      = { background: "#dc2626", color: "#fff", fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: "20px" };
 const formCard   = { background: "#fff", borderRadius: "12px", padding: "24px", boxShadow: "0 4px 16px rgba(0,0,0,0.06)", border: "1px solid #eee", marginBottom: "32px" };
-const quizCard   = { background: "#fff", borderRadius: "10px", padding: "16px 20px", border: "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "10px" };
+const quizCard   = { background: "#fff", borderRadius: "10px", padding: "20px 24px", border: "1px solid #eee", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "14px" };
 const emptyBox   = { background: "#fff", borderRadius: "10px", padding: "20px", border: "1px solid #eee", color: "#9ca3af", fontSize: "14px", marginBottom: "16px" };
 const notifCard  = { background: "#fffbeb", border: "1px solid #fcd34d", borderRadius: "10px", padding: "12px 16px", display: "flex", gap: "10px" };
 const labelStyle = { display: "block", fontSize: "12.5px", fontWeight: 600, color: "#374151", marginBottom: "6px" };
 const inputStyle = { width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #ddd", fontSize: "14px", fontFamily: "inherit", boxSizing: "border-box" };
 const errorBox   = { background: "#fef2f2", border: "1px solid #fecaca", color: "#dc2626", padding: "10px 14px", borderRadius: "8px", fontSize: "13px" };
 const primaryBtn = { background: "#103d25", color: "#fff", border: "none", padding: "10px 22px", borderRadius: "8px", fontSize: "14px", fontWeight: 700, cursor: "pointer", alignSelf: "flex-start" };
-const thStyle = { padding: "10px 14px", textAlign: "left", color: "#fff", fontWeight: 600, fontSize: "11.5px", textTransform: "uppercase", letterSpacing: "0.03em" };
-const tdStyle = { padding: "10px 14px", borderBottom: "1px solid #f0f0f0", color: "#374151" };
+const thStyle = { padding: "14px 20px", textAlign: "left", color: "#fff", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.04em" };
+const tdStyle = { padding: "16px 20px", borderBottom: "1px solid #f0f0f0", color: "#374151" };
+const subCardMobile = { background: "#fafafa", border: "1px solid #eee", borderRadius: "10px", padding: "14px 16px" };
+const mobileRow   = { display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px" };
+const mobileLabel  = { fontSize: "12px", color: "#9ca3af", fontWeight: 600 };
+const mobileValue  = { fontSize: "13px", color: "#374151", fontWeight: 500, textAlign: "right" };
 const signOutBtn = { background: "#fff", color: "#dc2626", border: "1px solid #dc2626", padding: "8px 18px", borderRadius: "8px", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif" };

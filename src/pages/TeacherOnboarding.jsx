@@ -24,14 +24,42 @@ export default function TeacherOnboarding({ navigate }) {
     if (!semester)     { setError("Please select your semester."); return; }
 
     setSaving(true);
-    const { data, error: err } = await supabase
+
+    // ✅ FIX: Look for an existing teacher first instead of always inserting.
+    // Previously, every login created a NEW row with a NEW id, so quizzes and
+    // submissions linked to the old id became invisible after sign-out.
+    const { data: existing, error: findErr } = await supabase
+      .from("teachers")
+      .select("*")
+      .eq("name", name.trim())
+      .eq("department", department)
+      .eq("semester", semester)
+      .maybeSingle();
+
+    if (findErr) {
+      setSaving(false);
+      setError(findErr.message);
+      return;
+    }
+
+    if (existing) {
+      // Teacher already exists — restore their session with the original id.
+      // All quizzes and submissions remain linked correctly.
+      setSaving(false);
+      loginTeacher(existing);
+      navigate("teacher-dashboard");
+      return;
+    }
+
+    // First time this teacher has logged in — create the record.
+    const { data, error: insertErr } = await supabase
       .from("teachers")
       .insert({ name: name.trim(), department, semester })
       .select()
       .single();
 
     setSaving(false);
-    if (err) { setError(err.message); return; }
+    if (insertErr) { setError(insertErr.message); return; }
 
     loginTeacher(data);
     navigate("teacher-dashboard");

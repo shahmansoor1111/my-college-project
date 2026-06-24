@@ -26,7 +26,34 @@ export default function StudentOnboarding({ navigate }) {
     if (!semester)          { setError("Please select your semester."); return; }
 
     setSaving(true);
-    const { data, error: err } = await supabase
+
+    // ✅ FIX: Look for an existing student by enrollment number first.
+    // Previously, every login created a NEW row with a NEW id, so quiz
+    // submissions linked to the old id were invisible after sign-out,
+    // making completed quizzes appear available again.
+    const { data: existing, error: findErr } = await supabase
+      .from("students")
+      .select("*")
+      .eq("enrollment_number", enrollment.trim())
+      .maybeSingle();
+
+    if (findErr) {
+      setSaving(false);
+      setError(findErr.message);
+      return;
+    }
+
+    if (existing) {
+      // Student already exists — restore their session with the original id.
+      // All their submissions remain linked, so completed quizzes stay completed.
+      setSaving(false);
+      loginStudent(existing);
+      navigate("student-dashboard");
+      return;
+    }
+
+    // First time this student has logged in — create the record.
+    const { data, error: insertErr } = await supabase
       .from("students")
       .insert({
         full_name:         fullName.trim(),
@@ -38,7 +65,7 @@ export default function StudentOnboarding({ navigate }) {
       .single();
 
     setSaving(false);
-    if (err) { setError(err.message); return; }
+    if (insertErr) { setError(insertErr.message); return; }
 
     loginStudent(data);
     navigate("student-dashboard");
