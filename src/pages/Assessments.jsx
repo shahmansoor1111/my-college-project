@@ -159,7 +159,7 @@ const QUIZ_DATA = {
 };
 
 const PROGRAMMES = Object.keys(QUIZ_DATA);
-const QUIZ_TIME = 15 * 60;
+const QUIZ_TIME = 2 * 60;
 const LABELS = ["A", "B", "C", "D"];
 
 function formatTime(secs) {

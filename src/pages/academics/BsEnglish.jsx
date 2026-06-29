@@ -60,7 +60,7 @@ export default function BsEnglish({ navigate }) {
           {icon:"📅",label:"Duration",val:"4 Years"},
           {icon:"📆",label:"Semesters",val:"8 Semesters"},
           {icon:"⏰",label:"Timing",val:"8:00 AM – 2:00 PM"},
-          {icon:"🎓",label:"Affiliation",val:"Univ. of Peshawar"}
+          {icon:"🎓",label:"Affiliation",val:"University of Pakistan (NUP)"}
         ].map((s,i)=>(
           <div key={i} style={{
             background:"#fff",

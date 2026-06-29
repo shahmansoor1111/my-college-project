@@ -13,15 +13,12 @@ const TYPE_FILTERS = [
 
 export default function Community({ navigate }) {
   const { posts, loading, error, fetchPosts } = useCommunity();
-  const { identity, isUnlocked, roleMeta, leaveCommunity, markCommunitySeen } = useCommunityIdentity();
+  const { identity, isUnlocked, roleMeta, leaveCommunity } = useCommunityIdentity();
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    if (isUnlocked) {
-      fetchPosts();
-      markCommunitySeen(); // viewing the board clears the navbar badge
-    }
-  }, [isUnlocked, fetchPosts, markCommunitySeen]);
+    if (isUnlocked) fetchPosts();
+  }, [isUnlocked, fetchPosts]);
 
   if (!isUnlocked) {
     return <CommunityGate onUnlocked={() => fetchPosts()} />;

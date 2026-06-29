@@ -43,16 +43,16 @@ const IMAGES = [
   { id: 8,  src: four, category: "Events",  caption: "Cricket Ground" },
   { id: 9,  src: eight, category: "Events",  caption: "Islmic Center" },
   { id: 10, src: gall1, category: "Events",  caption: "Welcome Ceremony New Students" },
-  { id: 11, src: null, category: "Events",  caption: "Science Exhibition" },
-  { id: 12, src: null, category: "Events",  caption: "Cultural Fest Performance" },
-  { id: 13, src: null, category: "Sports",  caption: "Cricket Match Finals" },
-  { id: 14, src: null, category: "Sports",  caption: "Football Tournament" },
-  { id: 15, src: null, category: "Sports",  caption: "Athletics Sports Day" },
-  { id: 16, src: null, category: "Sports",  caption: "Basketball Court Action" },
-  { id: 17, src: null, category: "Academic", caption: "Classroom Session" },
-  { id: 18, src: null, category: "Academic", caption: "Students in Discussion" },
-  { id: 19, src: null, category: "Academic", caption: "Examination Hall" },
-  { id: 20, src: null, category: "Academic", caption: "Faculty Meeting" },
+  { id: 11, src: one, category: "Events",  caption: "Science Exhibition" },
+  { id: 12, src: two, category: "Events",  caption: "Cultural Fest Performance" },
+  { id: 13, src: thirteen, category: "Sports",  caption: "Cricket Match Finals" },
+  { id: 14, src: three, category: "Sports",  caption: "Football Tournament" },
+  { id: 15, src: four, category: "Sports",  caption: "Athletics Sports Day" },
+  { id: 16, src: gall1, category: "Sports",  caption: "Basketball Court Action" },
+  { id: 17, src: gall2, category: "Academic", caption: "Classroom Session" },
+  { id: 18, src: twelve, category: "Academic", caption: "Students in Discussion" },
+  { id: 19, src: five, category: "Academic", caption: "Examination Hall" },
+  { id: 20, src: eight, category: "Academic", caption: "Faculty Meeting" },
 ];
 
 // ── REPLACE these with your actual video files or YouTube embed URLs ──
@@ -62,7 +62,7 @@ const VIDEOS = [
   { id: 2, src: vid2, thumb: pp1, caption: "Final Year Project",  duration: "1:22" },
   { id: 3, src: vid3, thumb: grade2, caption: "Short Clip Graduation Ceremony",   duration: "0:57" },
   { id: 4, src: vid4, thumb: hall1, caption: "Respectable Guests",       duration: "0:24" },
-  { id: 5, src: null, thumb: gall1, caption: "Students & Faculty Interview",  duration: "5:20" },
+  { id: 5, src: vid1, thumb: gall1, caption: "Students & Faculty Interview",  duration: "5:20" },
 ];
 
 const CATEGORIES = ["All", "Campus", "Events", "Sports", "Academic"];

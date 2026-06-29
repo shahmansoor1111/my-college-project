@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState } from "react";
 
 const CommunityIdentityContext = createContext(null);
 
@@ -27,7 +27,6 @@ const ROLE_META = {
 };
 
 const STORAGE_KEY = "community_identity";
-const LAST_SEEN_KEY = "community_last_seen_at";
 
 function loadFromStorage() {
   try {
@@ -38,29 +37,8 @@ function loadFromStorage() {
   }
 }
 
-// Last-seen is tracked independently of identity (not keyed to role/name)
-// because the navbar badge needs to show a count even for someone who
-// hasn't gone through the role+code gate yet — e.g. a student sees "3" on
-// the Community icon from the Home page before ever entering a code. Once
-// they actually open Community, this timestamp resets, badge clears.
-function loadLastSeen() {
-  try {
-    const raw = sessionStorage.getItem(LAST_SEEN_KEY);
-    return raw ? new Date(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
 export function CommunityIdentityProvider({ children }) {
   const [identity, setIdentity] = useState(loadFromStorage); // { role, name } | null
-  const [lastSeenAt, setLastSeenAt] = useState(loadLastSeen); // Date | null
-
-  const markCommunitySeen = useCallback(() => {
-    const now = new Date();
-    sessionStorage.setItem(LAST_SEEN_KEY, now.toISOString());
-    setLastSeenAt(now);
-  }, []);
 
   function verifyAndEnter(role, code, name) {
     if (!ROLE_CODES[role]) {
@@ -102,8 +80,6 @@ export function CommunityIdentityProvider({ children }) {
       leaveCommunity,
       roleMeta: identity ? ROLE_META[identity.role] : null,
       ROLE_META,
-      lastSeenAt,         // Date | null — when this browser tab last viewed Community
-      markCommunitySeen,  // call this when Community page mounts
     }}>
       {children}
     </CommunityIdentityContext.Provider>

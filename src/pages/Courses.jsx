@@ -634,13 +634,13 @@ export default function Courses({ navigate }) {
       }
 
       {/* ── BOTTOM NOTE ── */}
-      <div style={{marginTop:"36px",background:"linear-gradient(135deg,#faf3e0,#fff8e8)",border:"1.5px solid #e8c97a",borderRadius:"14px",padding:"22px 28px",display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap"}}>
+      {/* <div style={{marginTop:"36px",background:"linear-gradient(135deg,#faf3e0,#fff8e8)",border:"1.5px solid #e8c97a",borderRadius:"14px",padding:"22px 28px",display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap"}}>
         <span style={{fontSize:"24px"}}>💡</span>
         <div>
           <div style={{fontFamily:"'Playfair Display',serif",fontSize:"16px",color:"#103d25",marginBottom:"4px"}}>PDF Notes</div>
           <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:"13px",color:"#6b7280"}}>To enable PDF downloads, add your actual PDF file paths to each course's <code style={{background:"#f3f4f6",padding:"1px 6px",borderRadius:"4px",fontSize:"12px"}}>pdf: "#"</code> property in Courses.jsx. You can upload files to <code style={{background:"#f3f4f6",padding:"1px 6px",borderRadius:"4px",fontSize:"12px"}}>src/assets/pdfs/</code></p>
         </div>
-      </div>
+      </div> */}
     </PageLayout>
   );
 }

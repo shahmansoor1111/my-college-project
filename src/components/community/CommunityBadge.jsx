@@ -1,39 +1,12 @@
-import { useEffect, useState, useRef } from "react";
-import { useCommunity } from "../../context/CommunityContext";
-import { useCommunityIdentity } from "../../context/CommunityIdentity";
+import { useCommunityCount } from "../../context/CommunityCount";
 
-const POLL_INTERVAL_MS = 25000;
-const MAX_BADGE = 9; // shows "9+" beyond this, keeps the navbar tidy
-
-// Shared polling logic used by both badge variants below.
-function useUnseenCount() {
-  const { fetchUnseenCount } = useCommunity();
-  const { lastSeenAt } = useCommunityIdentity();
-  const [count, setCount] = useState(0);
-  const lastSeenRef = useRef(lastSeenAt);
-  lastSeenRef.current = lastSeenAt; // always read the freshest value inside the interval closure
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function poll() {
-      const n = await fetchUnseenCount(lastSeenRef.current);
-      if (!cancelled) setCount(n);
-    }
-
-    poll(); // immediately on mount/identity-change, then every interval
-    const id = setInterval(poll, POLL_INTERVAL_MS);
-    return () => { cancelled = true; clearInterval(id); };
-  }, [fetchUnseenCount, lastSeenAt]);
-
-  return count;
-}
+const MAX_BADGE = 99; // shows "99+" beyond this, keeps the navbar tidy
 
 // Desktop variant: small red dot pinned to the top-right corner of its
 // parent. Parent button MUST have position: relative for this to land
 // correctly (see BADGE_INTEGRATION.md).
 export default function CommunityBadge() {
-  const count = useUnseenCount();
+  const { count } = useCommunityCount();
   if (count <= 0) return null;
 
   return (
@@ -52,10 +25,9 @@ export default function CommunityBadge() {
 }
 
 // Mobile variant: just the number, no absolute positioning — meant to sit
-// inline next to the label inside a flex row that already has room (the
-// mobile menu has full-width rows, unlike the cramped desktop nav pills).
+// inline next to the label inside a flex row that already has room.
 export function CommunityBadgeNumber() {
-  const count = useUnseenCount();
+  const { count } = useCommunityCount();
   if (count <= 0) return null;
   return <>{count > MAX_BADGE ? `${MAX_BADGE}+` : count}</>;
 }

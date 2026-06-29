@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { supabase } from "../library/supabase";
 import { useCommunityIdentity } from "./CommunityIdentity";
 
@@ -48,6 +48,24 @@ export function CommunityProvider({ children }) {
     return withCounts;
   }, []);
 
+  // Keep the feed live: any insert/update/delete to `posts`, from anyone,
+  // anywhere, triggers a re-fetch automatically. No manual refresh needed.
+  // Uses a ref for fetchPosts to avoid re-subscribing every render while
+  // still always calling the latest version of the function.
+  const fetchPostsRef = useRef(fetchPosts);
+  fetchPostsRef.current = fetchPosts;
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("posts-feed-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, () => {
+        fetchPostsRef.current();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
   const fetchPostById = useCallback(async (id) => {
     const { data, error } = await supabase
       .from("posts")
@@ -59,21 +77,6 @@ export function CommunityProvider({ children }) {
       return null;
     }
     return data;
-  }, []);
-
-  // Count of posts created after `sinceDate`, for the navbar badge.
-  // sinceDate may be null (nobody has ever viewed Community in this tab) —
-  // in that case we count ALL posts, since everything is "new" to them.
-  const fetchUnseenCount = useCallback(async (sinceDate) => {
-    let query = supabase
-      .from("posts")
-      .select("*", { count: "exact", head: true });
-    if (sinceDate) {
-      query = query.gt("created_at", sinceDate.toISOString());
-    }
-    const { count, error } = await query;
-    if (error) return 0;
-    return count ?? 0;
   }, []);
 
   async function createPost({ type, title, content }) {
@@ -234,7 +237,7 @@ export function CommunityProvider({ children }) {
     <CommunityContext.Provider value={{
       posts, loading, error,
       currentAuthor,
-      fetchPosts, fetchPostById, fetchUnseenCount, createPost, updatePost, togglePin, deletePost,
+      fetchPosts, fetchPostById, createPost, updatePost, togglePin, deletePost,
       fetchComments, addComment, deleteComment,
       fetchReactionState, toggleReaction,
     }}>

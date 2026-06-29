@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { useSession } from "../context/SessionContext";
 import CommunityBadge, { CommunityBadgeNumber } from "./community/CommunityBadge";
 function getNavLinks(goToDashboard) {
@@ -200,6 +200,7 @@ function NavItem({ item, currentPage, navigate, closeMobile }) {
       padding: item.highlight ? "8px 18px" : "8px 14px",
     borderRadius: "7px", transition: "all 0.2s", whiteSpace: "nowrap",
       position: "relative",
+      
     }}
       onMouseEnter={e => {
         if (!item.highlight) { e.currentTarget.style.color = "#e8c97a"; e.currentTarget.style.background = "rgba(255,255,255,0.1)"; }
@@ -303,6 +304,31 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
     closeAll();
   }
 
+  // ─────────────────────────────────────────────────────────────────────
+  // IMPORTANT: `barsRef` wraps ONLY the two solid bars (logo row + nav
+  // row) — NOT the mobile dropdown menu. We measure that, not the whole
+  // header, because the mobile menu mounts/unmounts inside the same
+  // fixed container. If we measured the container that includes the
+  // dropdown, opening the menu would grow the measured height, which
+  // would resize the page spacer below it on every open/close — that's
+  // what was causing the whole page to flash/jump when the hamburger
+  // was tapped. The two bars never change height when the menu toggles,
+  // so measuring just them keeps the spacer (and the rest of the page)
+  // completely still.
+  // ─────────────────────────────────────────────────────────────────────
+  const barsRef = useRef(null);
+  const [headerHeight, setHeaderHeight] = useState(144);
+
+  useLayoutEffect(() => {
+    if (!barsRef.current) return;
+    const update = () => setHeaderHeight(Math.ceil(barsRef.current.getBoundingClientRect().height));
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(barsRef.current);
+    window.addEventListener("resize", update);
+    return () => { ro.disconnect(); window.removeEventListener("resize", update); };
+  }, []);
+
   return (
     <>
       <style>{`
@@ -315,108 +341,130 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
           .desktop-nav { display: none !important; }
           .hamburger   { display: flex  !important; }
         }
+        @media (max-width: 480px) {
+          .top-bar-title    { font-size: 16px !important; }
+          .top-bar-subtitle { font-size: 11px !important; }
+          .top-bar-logo     { width: 38px !important; height: 38px !important; }
+        }
       `}</style>
 
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
-        height: "72px", background: "#103d25",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 32px", borderBottom: "3px solid #c9a84c",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
-      }}>
+      {/* ===== SINGLE FIXED HEADER: top info row + nav row, stacked ===== */}
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000 }}>
 
-        {/* Logo */}
-        <button onClick={() => navigate("home")} style={{
-          display: "flex", alignItems: "center", gap: "12px",
-          background: "none", border: "none", cursor: "pointer",
-        }}>
+        {/* This inner wrapper holds ONLY the two solid bars — measured by
+            barsRef. The mobile dropdown below is a sibling, outside this
+            wrapper, so it can never affect the measured height. */}
+        <div ref={barsRef}>
+
+          {/* --- Row 1: logo + college name, centered --- */}
           <div style={{
-            width: "46px", height: "46px", borderRadius: "12px",
-            background: "linear-gradient(135deg,#c9a84c,#e8c97a)",
+            background: "#0b2e1c",
             display: "flex", alignItems: "center", justifyContent: "center",
-            flexShrink: 0, boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+            padding: "12px 24px", borderBottom: "1px solid rgba(201,168,76,0.25)",
           }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
-              stroke="#103d25" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-            </svg>
+            <button onClick={() => navigate("home")} style={{
+              display: "flex", alignItems: "center", gap: "14px",
+              background: "none", border: "none", cursor: "pointer",
+            }}>
+              <div className="top-bar-logo" style={{
+                width: "50px", height: "50px", borderRadius: "12px",
+                background: "linear-gradient(135deg,#c9a84c,#e8c97a)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0, boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
+              }}>
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+                  stroke="#103d25" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+              </div>
+              <div style={{ textAlign: "left" }}>
+                <div className="top-bar-title" style={{ fontFamily: "'Playfair Display',serif", color: "#fff", fontSize: "20px", lineHeight: 1.3 }}>
+                  FG Degree College for Men
+                </div>
+                <div className="top-bar-subtitle" style={{ fontSize: "13px", fontFamily: "'DM Sans',sans-serif", color: "#cfe8da", fontWeight: 300, letterSpacing: "0.3px" }}>
+                  In Affiliation with National University of Pakistan (NUP)
+                </div>
+              </div>
+            </button>
           </div>
-          <div style={{ textAlign: "left" }}>
-            <div style={{ fontFamily: "'Playfair Display',serif", color: "#fff", fontSize: "15px", lineHeight: 1.3 }}>
-              FG Degree College
+
+          {/* --- Row 2: nav links --- */}
+          <nav style={{
+            background: "#103d25",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "10px 32px", borderBottom: "3px solid #c9a84c",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.3)", position: "relative",
+          }}>
+
+            {/* Desktop Nav */}
+            <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              {NAV_LINKS.map((item, i) => (
+                <NavItem key={i} item={item} currentPage={currentPage} navigate={navigate} />
+              ))}
             </div>
-            <div style={{ fontSize: "11px", fontFamily: "'DM Sans',sans-serif", color: "#e8c97a", fontWeight: 300, letterSpacing: "0.5px" }}>
-              Peshawar — Est. 1947
-            </div>
-          </div>
-        </button>
 
-        {/* Desktop Nav */}
-        <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          {NAV_LINKS.map((item, i) => (
-            <NavItem key={i} item={item} currentPage={currentPage} navigate={navigate} />
-          ))}
-
-
+            {/* Hamburger */}
+            <button className="hamburger" onClick={() => setMobileOpen(o => !o)}
+              style={{
+                display: "none", background: "none", border: "none", cursor: "pointer", color: "#fff",
+                padding: "8px", position: "absolute", right: "32px", top: "50%", transform: "translateY(-50%)",
+              }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                {mobileOpen
+                  ? <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>
+                  : <><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></>
+                }
+              </svg>
+            </button>
+          </nav>
         </div>
 
-        {/* Hamburger */}
-        <button className="hamburger" onClick={() => setMobileOpen(o => !o)}
-          style={{ display: "none", background: "none", border: "none", cursor: "pointer", color: "#fff", padding: "8px" }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            {mobileOpen
-              ? <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>
-              : <><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></>
-            }
-          </svg>
-        </button>
-      </nav>
+        {/* --- Mobile Menu (sibling of barsRef wrapper, NOT inside it) --- */}
+        {mobileOpen && (
+          <div style={{
+            background: "#103d25", borderTop: "1px solid rgba(201,168,76,0.3)",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.3)",
+            maxHeight: `calc(100vh - ${headerHeight}px)`, overflowY: "auto",
+          }}>
+            {NAV_LINKS.map((item, i) => (
+              <div key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                {item.dropdown ? (
+                  <>
+                    <button
+                      onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
+                      style={{
+                        width: "100%", padding: "16px 24px", background: "none", border: "none",
+                        color: "#d1d5db", fontFamily: "'DM Sans',sans-serif", fontSize: "15px",
+                        fontWeight: 500, cursor: "pointer",
+                        display: "flex", justifyContent: "space-between", alignItems: "center",
+                      }}
+                    >
+                      {item.label}
+                      <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor"
+                        style={{ transform: mobileExpanded === item.label ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                        <path d="M0 0l5 6 5-6z"/>
+                      </svg>
+                    </button>
+                    {mobileExpanded === item.label && (
+                      <div style={{ background: "rgba(0,0,0,0.2)" }}>
+                        {item.dropdown.map((d, j) => (
+                          <MobileItem key={j} item={d} navigate={navigate} close={closeAll} />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <MobileItem item={item} navigate={navigate} close={closeAll} />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      {/* Mobile Menu */}
-      {mobileOpen && (
-        <div style={{
-          position: "fixed", top: "72px", left: 0, right: 0, zIndex: 999,
-          background: "#103d25", borderTop: "1px solid rgba(201,168,76,0.3)",
-          boxShadow: "0 12px 30px rgba(0,0,0,0.3)",
-          maxHeight: "calc(100vh - 72px)", overflowY: "auto",
-        }}>
-
-          {NAV_LINKS.map((item, i) => (
-            <div key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-              {item.dropdown ? (
-                <>
-                  <button
-                    onClick={() => setMobileExpanded(mobileExpanded === item.label ? null : item.label)}
-                    style={{
-                      width: "100%", padding: "16px 24px", background: "none", border: "none",
-                      color: "#d1d5db", fontFamily: "'DM Sans',sans-serif", fontSize: "15px",
-                      fontWeight: 500, cursor: "pointer",
-                      display: "flex", justifyContent: "space-between", alignItems: "center",
-                    }}
-                  >
-                    {item.label}
-                    <svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor"
-                      style={{ transform: mobileExpanded === item.label ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-                      <path d="M0 0l5 6 5-6z"/>
-                    </svg>
-                  </button>
-                  {mobileExpanded === item.label && (
-                    <div style={{ background: "rgba(0,0,0,0.2)" }}>
-                      {item.dropdown.map((d, j) => (
-                        <MobileItem key={j} item={d} navigate={navigate} close={closeAll} />
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <MobileItem item={item} navigate={navigate} close={closeAll} />
-              )}
-            </div>
-          ))}
-
-        </div>
-      )}
+      {/* Spacer so page content isn't hidden under the single fixed header */}
+      <div style={{ height: `${headerHeight}px` }} />
     </>
   );
 }

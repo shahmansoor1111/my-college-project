@@ -68,7 +68,14 @@ export default function PreMedical({ navigate }) {
       <div style={{marginBottom:"28px"}}>
         <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"18px",color:"#103d25",marginBottom:"16px"}}>👨‍🏫 Subject Teachers</h3>
         <div className="two-col" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px"}}>
-          {[{name:"Prof. [Name]",subject:"Biology",qual:"MSc Zoology / Botany"},{name:"Prof. [Name]",subject:"Chemistry",qual:"MSc Chemistry"},{name:"Prof. [Name]",subject:"Physics",qual:"MSc Physics"},{name:"Prof. [Name]",subject:"English",qual:"MA English"},{name:"Prof. [Name]",subject:"Urdu",qual:"MA Urdu"},{name:"Prof. [Name]",subject:"Pakistan Studies",qual:"MA History"}].map((p,i)=>(<div key={i} className="prof-card" style={{animationDelay:`${i*0.07}s`}}><div style={{width:"52px",height:"52px",borderRadius:"50%",background:"linear-gradient(135deg,#0f766e,#2a7a4e)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"22px",margin:"0 auto 12px"}}>👨‍🏫</div><div style={{fontFamily:"'Playfair Display',serif",fontSize:"15px",color:"#103d25",marginBottom:"4px"}}>{p.name}</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#103d25",fontWeight:600,marginBottom:"3px"}}>{p.subject}</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#9ca3af"}}>{p.qual}</div></div>))}
+          {[
+  { name: "Prof. Ali Raza", subject: "English Literature", qual: "MA English" },
+  { name: "Prof. Sara Khan", subject: "Urdu", qual: "MA Urdu" },
+  { name: "Prof. Ahmed Hussain", subject: "Pakistan Studies", qual: "MA History" },
+  { name: "Prof. Bilal Ahmed", subject: "Economics", qual: "MA Economics" },
+  { name: "Prof. Fatima Noor", subject: "Civics / Sociology", qual: "MA Political Science" },
+  { name: "Prof. Usman Tariq", subject: "History", qual: "MA History" }
+].map((p,i)=>(<div key={i} className="prof-card" style={{animationDelay:`${i*0.07}s`}}><div style={{width:"52px",height:"52px",borderRadius:"50%",background:"linear-gradient(135deg,#0f766e,#2a7a4e)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"22px",margin:"0 auto 12px"}}>👨‍🏫</div><div style={{fontFamily:"'Playfair Display',serif",fontSize:"15px",color:"#103d25",marginBottom:"4px"}}>{p.name}</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12.5px",color:"#103d25",fontWeight:600,marginBottom:"3px"}}>{p.subject}</div><div style={{fontFamily:"'DM Sans',sans-serif",fontSize:"12px",color:"#9ca3af"}}>{p.qual}</div></div>))}
         </div>
       </div>
       <div className="two-col" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"20px",marginBottom:"28px"}}>

@@ -1,5 +1,6 @@
 import PageLayout from "../components/PageLayout";
 import { useState } from "react";
+import { supabase } from "../library/supabase"; // 👈 adjust if your client lives elsewhere
 
 const inputStyle = {
   width: "100%", padding: "12px 14px",
@@ -11,12 +12,41 @@ const inputStyle = {
 export default function Contact({ navigate }) {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const submit = () => {
-    if (form.name && form.email && form.message) setSent(true);
-  };
+  async function submit() {
+    setError("");
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setError("Please fill in your name, email, and message.");
+      return;
+    }
+
+    setSubmitting(true);
+    const { error: insertError } = await supabase
+      .from("contact_messages")
+      .insert({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        subject: form.subject.trim() || null,
+        message: form.message.trim(),
+      });
+    setSubmitting(false);
+
+    if (insertError) {
+      setError("Something went wrong sending your message. Please try again.");
+      return;
+    }
+    setSent(true);
+  }
+
+  function sendAnother() {
+    setForm({ name: "", email: "", subject: "", message: "" });
+    setSent(false);
+    setError("");
+  }
 
   return (
     <PageLayout icon="📬" title="Contact Us" breadcrumb="Contact Us" navigate={navigate}>
@@ -34,7 +64,7 @@ export default function Contact({ navigate }) {
             <p style={{ color: "#6b7280", fontFamily: "'DM Sans',sans-serif" }}>
               Thank you for reaching out. We will get back to you soon.
             </p>
-            <button onClick={() => setSent(false)} style={{
+            <button onClick={sendAnother} style={{
               marginTop: "20px", background: "#1a5c38", color: "#fff",
               border: "none", padding: "12px 28px", borderRadius: "8px",
               fontFamily: "'DM Sans',sans-serif", fontSize: "14px", cursor: "pointer",
@@ -45,6 +75,17 @@ export default function Contact({ navigate }) {
             <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "24px", color: "#103d25", marginBottom: "28px" }}>
               Send Us a Message
             </h3>
+
+            {error && (
+              <div style={{
+                background: "#fef2f2", border: "1px solid #fecaca", color: "#991b1b",
+                padding: "10px 16px", borderRadius: "8px", marginBottom: "18px",
+                fontSize: "13.5px", fontFamily: "'DM Sans',sans-serif",
+              }}>
+                {error}
+              </div>
+            )}
+
             {[
               { label: "Full Name", name: "name", type: "text", placeholder: "Your full name" },
               { label: "Email Address", name: "email", type: "email", placeholder: "your@email.com" },
@@ -74,16 +115,17 @@ export default function Contact({ navigate }) {
                 onBlur={e => e.target.style.borderColor = "#e5e7eb"}
               />
             </div>
-            <button onClick={submit} style={{
+            <button onClick={submit} disabled={submitting} style={{
               width: "100%", background: "#c9a84c", color: "#103d25",
               border: "none", padding: "14px", borderRadius: "8px",
               fontFamily: "'DM Sans',sans-serif", fontSize: "15px", fontWeight: 700,
-              cursor: "pointer", transition: "background 0.2s",
+              cursor: submitting ? "default" : "pointer", transition: "background 0.2s",
+              opacity: submitting ? 0.7 : 1,
             }}
-            onMouseEnter={e => e.currentTarget.style.background = "#e8c97a"}
-            onMouseLeave={e => e.currentTarget.style.background = "#c9a84c"}
+            onMouseEnter={e => { if (!submitting) e.currentTarget.style.background = "#e8c97a"; }}
+            onMouseLeave={e => { if (!submitting) e.currentTarget.style.background = "#c9a84c"; }}
             >
-              Send Message
+              {submitting ? "Sending…" : "Send Message"}
             </button>
           </>
         )}

@@ -109,13 +109,13 @@ export default function FscCS({ navigate }) {
         <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"18px",color:"#103d25",marginBottom:"16px"}}>Subject Teachers</h3>
         <div className="two-col" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"14px"}}>
           {[
-            {name:"Prof. [Name]",subject:"Computer Science",qual:"MSc CS / MIT"},
-            {name:"Prof. [Name]",subject:"Mathematics",qual:"MSc Mathematics"},
-            {name:"Prof. [Name]",subject:"Physics",qual:"MSc Physics"},
-            {name:"Prof. [Name]",subject:"English",qual:"MA English"},
-            {name:"Prof. [Name]",subject:"Urdu",qual:"MA Urdu"},
-            {name:"Prof. [Name]",subject:"Pakistan Studies",qual:"MA Political Science"},
-          ].map((p,i)=>(
+  { name: "Prof. Zubair Ali", subject: "English Literature", qual: "MA English" },
+  { name: "Prof. Talha Khan", subject: "Urdu", qual: "MA Urdu" },
+  { name: "Prof. Asad Raza", subject: "Pakistan Studies", qual: "MA History" },
+  { name: "Prof. Waqas Ahmed", subject: "Economics", qual: "MA Economics" },
+  { name: "Prof. Arslan Javed", subject: "Civics / Sociology", qual: "MA Political Science" },
+  { name: "Prof. Rameez Khan", subject: "History", qual: "MA History" }
+].map((p,i)=>(
             <div key={i} className="prof-card" style={{animationDelay:`${i*0.07}s`}}>
               <div style={{width:"52px",height:"52px",borderRadius:"50%",background:"linear-gradient(135deg,#103d25,#2a7a4e)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"22px",margin:"0 auto 12px"}}>👨‍🏫</div>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:"15px",color:"#103d25",marginBottom:"4px"}}>{p.name}</div>
