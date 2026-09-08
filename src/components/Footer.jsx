@@ -92,14 +92,9 @@ export default function Footer({ navigate }) {
           transition: background 0.2s, color 0.2s, transform 0.2s;
         }
         .social-btn:hover { transform: translateY(-3px); }
-        .map-iframe {
-          width: 100%; height: 100%; border: none; border-radius: 12px;
-          filter: saturate(1.1) contrast(1.05);
-        }
         @media (max-width: 768px) {
           .footer-grid { grid-template-columns: 1fr !important; }
           .footer-cols { grid-template-columns: 1fr 1fr !important; }
-          .map-box { height: 260px !important; }
         }
         @media (max-width: 480px) {
           .footer-cols { grid-template-columns: 1fr !important; }
@@ -112,28 +107,40 @@ export default function Footer({ navigate }) {
         fontFamily: "'DM Sans',sans-serif",
       }}>
 
-        {/* ── TOP SECTION ── */}
-        <div className="footer-grid" style={{
-          display: "grid",
-          gridTemplateColumns: "1.2fr 1fr",
-          gap: "40px",
+        {/* ── MAIN SECTION ── */}
+        <div style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "56px 32px 40px",
+          padding: "40px 32px 28px",
+          display: "grid",
+          gridTemplateColumns: "1fr 2fr",
+          gap: "48px",
+          alignItems: "start",
         }}>
 
-          {/* LEFT: Brand + Map */}
+          {/* LEFT: Brand + social */}
           <div>
-            {/* Brand */}
-            <div style={{ display: "flex", alignItems: "center", gap: "13px", marginBottom: "16px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "13px", marginBottom: "14px" }}>
+                <button onClick={() => navigate("home")} style={{
+              display: "flex", alignItems: "center", gap: "10px",
+              background: "none", border: "none", cursor: "pointer", flexShrink: 0,
+            }}>
               <div style={{
-                width: "50px", height: "50px", borderRadius: "50%", flexShrink: 0,
+                width: "38px", height: "38px", borderRadius: "9px",
                 background: "linear-gradient(135deg,#c9a84c,#e8c97a)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontFamily: "'Playfair Display',serif", fontSize: "20px", fontWeight: 700, color: "#103d25",
-              }}>FG</div>
+                boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+              }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="#103d25" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+              </div>
+            
+            </button>
               <div>
-                <div style={{ fontFamily: "'Playfair Display',serif", color: "#fff", fontSize: "16px", lineHeight: 1.3 }}>
+                <div style={{ fontFamily: "'Playfair Display',serif", color: "#fff", fontSize: "15px", lineHeight: 1.3 }}>
                   Federal Government Degree College
                 </div>
                 <div style={{ fontSize: "12px", color: "#e8c97a", fontWeight: 300, letterSpacing: "0.5px" }}>
@@ -142,18 +149,17 @@ export default function Footer({ navigate }) {
               </div>
             </div>
 
-            <p style={{ fontSize: "13.5px", color: "rgba(255,255,255,0.5)", lineHeight: 1.75, maxWidth: "400px", marginBottom: "24px" }}>
-              Empowering generations through quality education, discipline, and excellence. Located on Mall Road, Sadar Bazaar, opposite Fauji Foundation Hospital, Peshawar.
+            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)", lineHeight: 1.7, marginBottom: "18px" }}>
+              Empowering generations through quality education, discipline, and excellence.
             </p>
 
             {/* Social Icons */}
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "28px" }}>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
               {SOCIAL.map(s => (
                 <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer"
                   title={s.name}
-                  className="social-btn"
                   style={{ display: "flex", alignItems: "center", justifyContent: "center",
-                    width: "40px", height: "40px", borderRadius: "50%",
+                    width: "36px", height: "36px", borderRadius: "50%",
                     background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)",
                     textDecoration: "none", transition: "background 0.2s, color 0.2s, transform 0.2s",
                   }}
@@ -164,69 +170,32 @@ export default function Footer({ navigate }) {
                 </a>
               ))}
             </div>
-
-            {/* Google Map */}
-            <div className="map-box" style={{
-              height: "300px", borderRadius: "14px", overflow: "hidden",
-              border: "2px solid rgba(201,168,76,0.35)",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-            }}>
-             <iframe
-  className="map-iframe"
-  title="FG Degree College Location"
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2553.936148046144!2d71.52928827443027!3d34.00210682037823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38d917a67706bcbf%3A0x7d0b0a729a3091d2!2zRi5HIERlZ3JlZSBDb2xsZWdlIEZvciBCb3lzICjZhdix2K_Yp9mG24Ep!5e1!3m2!1sen!2s!4v1778048586027!5m2!1sen!2s"
-  allowFullScreen
-  loading="lazy"
-  referrerPolicy="no-referrer-when-downgrade"
-/>
-            </div>
           </div>
 
-          {/* RIGHT: Nav columns */}
-          <div>
-            <div style={{ color: "#e8c97a", fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase", fontWeight: 600, marginBottom: "20px" }}>
-              Quick Navigation
-            </div>
-            <div className="footer-cols" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 20px" }}>
+          {/* RIGHT: 3-column nav grid (About, Academics, Resources — all on same row) */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 24px" }}>
 
-              {/* About + General */}
-              <div>
-                <div style={{ color: "#c9a84c", fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>About & General</div>
-                {COL1.map(l => (
-                  <button key={l.page} className="footer-link" onClick={() => navigate(l.page)}>› {l.label}</button>
-                ))}
-                <div style={{ marginTop: "20px", color: "#c9a84c", fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>Resources</div>
-                {COL3.map(l => (
-                  <button key={l.page} className="footer-link" onClick={() => navigate(l.page)}>› {l.label}</button>
-                ))}
-              </div>
-
-              {/* Academics */}
-              <div>
-                <div style={{ color: "#c9a84c", fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>Academics</div>
-                {COL2.map(l => (
-                  <button key={l.page} className="footer-link" onClick={() => navigate(l.page)}>› {l.label}</button>
-                ))}
-              </div>
+            {/* About & General */}
+            <div>
+              <div style={{ color: "#c9a84c", fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>About & General</div>
+              {COL1.map(l => (
+                <button key={l.page} className="footer-link" onClick={() => navigate(l.page)}>› {l.label}</button>
+              ))}
             </div>
 
-            {/* Contact Info */}
-            <div style={{
-              marginTop: "28px", padding: "20px",
-              background: "rgba(255,255,255,0.04)",
-              borderRadius: "12px", border: "1px solid rgba(201,168,76,0.2)",
-            }}>
-              <div style={{ color: "#c9a84c", fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: "14px" }}>Contact Info</div>
-              {[
-                { icon: "📍", text: "Mall Road, Sadar Bazaar, Opp. Fauji Foundation Hospital, Peshawar" },
-                { icon: "📞", text: "+92-91-XXXXXXX" },
-                { icon: "✉️", text: "info@fgdc.edu.pk" },
-                { icon: "🕐", text: "Mon–Sat: 8:00 AM – 4:00 PM" },
-              ].map((c, i) => (
-                <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "10px", alignItems: "flex-start" }}>
-                  <span style={{ fontSize: "14px", flexShrink: 0 }}>{c.icon}</span>
-                  <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", lineHeight: 1.55 }}>{c.text}</span>
-                </div>
+            {/* Academics */}
+            <div>
+              <div style={{ color: "#c9a84c", fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>Academics</div>
+              {COL2.map(l => (
+                <button key={l.page} className="footer-link" onClick={() => navigate(l.page)}>› {l.label}</button>
+              ))}
+            </div>
+
+            {/* Resources */}
+            <div>
+              <div style={{ color: "#c9a84c", fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: "12px" }}>Resources</div>
+              {COL3.map(l => (
+                <button key={l.page} className="footer-link" onClick={() => navigate(l.page)}>› {l.label}</button>
               ))}
             </div>
           </div>

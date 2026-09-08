@@ -317,7 +317,14 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
   // completely still.
   // ─────────────────────────────────────────────────────────────────────
   const barsRef = useRef(null);
-  const [headerHeight, setHeaderHeight] = useState(144);
+  const [headerHeight, setHeaderHeight] = useState(96);
+
+  // ── Ticker (continuous marquee, no state/re-render needed) ─────────────
+  const MESSAGES = [
+    "🎓 Admissions Open — Apply Now for the New Academic Session",
+    "🌟 Empowering Future Leaders Through Quality Education",
+    "🏆 Excellence in Academics, Discipline, and Character Building",
+  ];
 
   useLayoutEffect(() => {
     if (!barsRef.current) return;
@@ -329,10 +336,22 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
     return () => { ro.disconnect(); window.removeEventListener("resize", update); };
   }, []);
 
+  // Render one full pass of the message set, with a decorative divider between items
+  const renderTickerPass = (keyPrefix) => (
+    <div className="ticker-track" aria-hidden={keyPrefix === "b" ? true : undefined}>
+      {MESSAGES.map((msg, i) => (
+        <span className="ticker-item" key={`${keyPrefix}-${i}`}>
+          <span className="ticker-text">{msg}</span>
+          <span className="ticker-dot">✦</span>
+        </span>
+      ))}
+    </div>
+  );
+
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
         @keyframes dropIn    { from { opacity:0; transform:translateY(-8px);  } to { opacity:1; transform:translateY(0); } }
         @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -341,74 +360,132 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
           .desktop-nav { display: none !important; }
           .hamburger   { display: flex  !important; }
         }
-        @media (max-width: 480px) {
-          .top-bar-title    { font-size: 16px !important; }
-          .top-bar-subtitle { font-size: 11px !important; }
-          .top-bar-logo     { width: 38px !important; height: 38px !important; }
+
+        /* ===== Ticker marquee ===== */
+        @keyframes tickerScroll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        @keyframes tickerShine {
+          0%   { background-position: -200% 0; }
+          100% { background-position:  200% 0; }
+        }
+        .ticker-bar {
+          position: relative;
+          background: linear-gradient(90deg, #0b2e1c 0%, #123c26 50%, #0b2e1c 100%);
+          border-bottom: 1px solid rgba(201,168,76,0.35);
+          overflow: hidden;
+          min-height: 42px;
+          display: flex;
+          align-items: center;
+        }
+        /* soft fade at the edges so text doesn't hard-cut */
+        .ticker-bar::before, .ticker-bar::after {
+          content: "";
+          position: absolute; top: 0; bottom: 0; width: 56px; z-index: 2; pointer-events: none;
+        }
+        .ticker-bar::before { left: 0;  background: linear-gradient(90deg, #0b2e1c 10%, transparent); }
+        .ticker-bar::after  { right: 0; background: linear-gradient(270deg, #0b2e1c 10%, transparent); }
+
+        .ticker-scroller {
+          display: flex;
+          width: max-content;
+          animation: tickerScroll 26s linear infinite;
+        }
+        .ticker-bar:hover .ticker-scroller { animation-play-state: paused; }
+
+        .ticker-track {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+        }
+        .ticker-item {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          padding: 0 28px;
+          white-space: nowrap;
+        }
+        .ticker-text {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 15.5px;
+          font-weight: 600;
+          letter-spacing: 0.4px;
+          background: linear-gradient(90deg, #cfe8da 0%, #f3e3ae 25%, #e8c97a 50%, #f3e3ae 75%, #cfe8da 100%);
+          background-size: 250% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          animation: tickerShine 6s linear infinite;
+        }
+        .ticker-dot {
+          color: #c9a84c;
+          font-size: 13px;
+          opacity: 0.8;
+          flex-shrink: 0;
+        }
+        @media (max-width: 600px) {
+          .ticker-text { font-size: 13.5px; }
+          .ticker-item { gap: 14px; padding: 0 18px; }
+          .ticker-bar { min-height: 38px; }
         }
       `}</style>
 
-      {/* ===== SINGLE FIXED HEADER: top info row + nav row, stacked ===== */}
+      {/* ===== SINGLE FIXED HEADER: ticker row + nav row, stacked ===== */}
       <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000 }}>
 
-        {/* This inner wrapper holds ONLY the two solid bars — measured by
-            barsRef. The mobile dropdown below is a sibling, outside this
-            wrapper, so it can never affect the measured height. */}
         <div ref={barsRef}>
 
-          {/* --- Row 1: logo + college name, centered --- */}
-          <div style={{
-            background: "#0b2e1c",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            padding: "12px 24px", borderBottom: "1px solid rgba(201,168,76,0.25)",
+          {/* --- Row 1: attractive continuous marquee ticker --- */}
+          <div className="ticker-bar">
+            <div className="ticker-scroller">
+              {renderTickerPass("a")}
+              {renderTickerPass("b")}
+            </div>
+          </div>
+
+          {/* --- Row 2: nav row (logo+FG left, menu items right) --- */}
+          <nav style={{
+            background: "#103d25",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "10px 32px", borderBottom: "3px solid #c9a84c",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.3)", position: "relative",
           }}>
+
+            {/* Logo + FG on the left */}
             <button onClick={() => navigate("home")} style={{
-              display: "flex", alignItems: "center", gap: "14px",
-              background: "none", border: "none", cursor: "pointer",
+              display: "flex", alignItems: "center", gap: "10px",
+              background: "none", border: "none", cursor: "pointer", flexShrink: 0,
             }}>
-              <div className="top-bar-logo" style={{
-                width: "50px", height: "50px", borderRadius: "12px",
+              <div style={{
+                width: "38px", height: "38px", borderRadius: "9px",
                 background: "linear-gradient(135deg,#c9a84c,#e8c97a)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0, boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
               }}>
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                   stroke="#103d25" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                   <path d="M6 12v5c3 3 9 3 12 0v-5"/>
                 </svg>
               </div>
-              <div style={{ textAlign: "left" }}>
-                <div className="top-bar-title" style={{ fontFamily: "'Playfair Display',serif", color: "#fff", fontSize: "20px", lineHeight: 1.3 }}>
-                  FG Degree College for Men
-                </div>
-                <div className="top-bar-subtitle" style={{ fontSize: "13px", fontFamily: "'DM Sans',sans-serif", color: "#cfe8da", fontWeight: 300, letterSpacing: "0.3px" }}>
-                  In Affiliation with National University of Pakistan (NUP)
-                </div>
-              </div>
+             <span style={{ fontFamily: "'Poppins', sans-serif", color: "#e8c97a", fontSize: "24px", fontWeight: 700, letterSpacing: "0.5px" }}>
+  FG
+</span>
             </button>
-          </div>
 
-          {/* --- Row 2: nav links --- */}
-          <nav style={{
-            background: "#103d25",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            padding: "10px 32px", borderBottom: "3px solid #c9a84c",
-            boxShadow: "0 4px 24px rgba(0,0,0,0.3)", position: "relative",
-          }}>
-
-            {/* Desktop Nav */}
+            {/* Desktop Nav — pushed to the right */}
             <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
               {NAV_LINKS.map((item, i) => (
                 <NavItem key={i} item={item} currentPage={currentPage} navigate={navigate} />
               ))}
             </div>
 
-            {/* Hamburger */}
             <button className="hamburger" onClick={() => setMobileOpen(o => !o)}
               style={{
                 display: "none", background: "none", border: "none", cursor: "pointer", color: "#fff",
-                padding: "8px", position: "absolute", right: "32px", top: "50%", transform: "translateY(-50%)",
+                padding: "8px",
               }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 {mobileOpen

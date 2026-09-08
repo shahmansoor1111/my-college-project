@@ -131,12 +131,13 @@ export default function Contact({ navigate }) {
         )}
       </div>
 
-      {/* Info */}
+      {/* Contact info cards */}
       <div style={{ marginTop: "32px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "20px" }}>
         {[
-          { icon: "📍", label: "Address", value: "FG Degree College, Peshawar, KPK, Pakistan" },
+          { icon: "📍", label: "Address", value: "Mall Road, Sadar Bazaar, Opp. Fauji Foundation Hospital, Peshawar" },
           { icon: "📞", label: "Phone", value: "+92-91-XXXXXXX" },
           { icon: "✉️", label: "Email", value: "info@fgdc.edu.pk" },
+          { icon: "🕐", label: "Office Hours", value: "Mon–Sat: 8:00 AM – 4:00 PM" },
         ].map(i => (
           <div key={i.label} style={{
             background: "#fff", borderRadius: "12px", padding: "22px",
@@ -147,6 +148,23 @@ export default function Contact({ navigate }) {
             <div style={{ fontSize: "14px", color: "#103d25", fontWeight: 500 }}>{i.value}</div>
           </div>
         ))}
+      </div>
+
+      {/* Map */}
+      <div style={{
+        marginTop: "32px", borderRadius: "14px", overflow: "hidden",
+        border: "2px solid rgba(201,168,76,0.35)", height: "360px",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+      }}>
+        <iframe
+          title="FG Degree College Location"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2553.936148046144!2d71.52928827443027!3d34.00210682037823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38d917a67706bcbf%3A0x7d0b0a729a3091d2!2zRi5HIERlZ3JlZSBDb2xsZWdlIEZvciBCb3lzICjZhdix2K_Yp9mG24Ep!5e1!3m2!1sen!2s!4v1778048586027!5m2!1sen!2s"
+          width="100%" height="100%"
+          style={{ border: "none" }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
     </PageLayout>
   );
