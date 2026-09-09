@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { useSession } from "../context/SessionContext";
+import logo from "../img/fglogo.jpeg"
 import CommunityBadge, { CommunityBadgeNumber } from "./community/CommunityBadge";
 function getNavLinks(goToDashboard) {
   const links = [
@@ -454,26 +455,42 @@ export default function Navbar({ currentPage, navigate, goToDashboard }) {
           }}>
 
             {/* Logo + FG on the left */}
-            <button onClick={() => navigate("home")} style={{
-              display: "flex", alignItems: "center", gap: "10px",
-              background: "none", border: "none", cursor: "pointer", flexShrink: 0,
-            }}>
-              <div style={{
-                width: "38px", height: "38px", borderRadius: "9px",
-                background: "linear-gradient(135deg,#c9a84c,#e8c97a)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
-              }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                  stroke="#103d25" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                </svg>
-              </div>
-             <span style={{ fontFamily: "'Poppins', sans-serif", color: "#e8c97a", fontSize: "24px", fontWeight: 700, letterSpacing: "0.5px" }}>
-  FG
-</span>
-            </button>
+           <button
+  onClick={() => navigate("home")}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    flexShrink: 0,
+  }}
+>
+  <img
+  src={logo}
+  alt="FG Logo"
+  style={{
+    width: "60px",
+height: "60px",
+borderRadius: "50%",
+    objectFit: "cover",
+    display: "block",
+  }}
+/>
+
+  <span
+    style={{
+      fontFamily: "'Poppins', sans-serif",
+      color: "#e8c97a",
+      fontSize: "24px",
+      fontWeight: 700,
+      letterSpacing: "0.5px",
+    }}
+  >
+    FG
+  </span>
+</button>
 
             {/* Desktop Nav — pushed to the right */}
             <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
