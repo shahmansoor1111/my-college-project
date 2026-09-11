@@ -130,8 +130,8 @@ export default function Footer({ navigate }) {
   src={logo}
   alt="FG Logo"
   style={{
-    width: "56",
-    height: "56",
+    width: "56px",
+    height: "56px",
     borderRadius: "50%",
     objectFit: "cover",
     display: "block",
