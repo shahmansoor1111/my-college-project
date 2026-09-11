@@ -529,10 +529,33 @@ export default function Home({ navigate }) {
           .stats-grid  { grid-template-columns:repeat(2,1fr) !important; }
           .faculty-nav-btn { width:34px !important; height:34px !important; font-size:15px !important; }
         }
+        /* ── MOBILE HERO FIX ── */
+        .hero-inner { padding: 90px 48px 100px; }
+        @media (max-width: 768px) {
+          .hero-inner { padding: 48px 20px 64px !important; }
+          .hero-badge { font-size: 11px !important; }
+          .hero-btns { flex-direction: column !important; }
+          .hero-btns button { width: 100% !important; text-align: center !important; }
+        }
+        /* ── MOBILE FACULTY ── */
+        .faculty-section { padding: 60px 32px; }
+        @media (max-width:768px) { .faculty-section { padding: 36px 16px !important; } }
+        /* ── MOBILE GALLERY SECTION ── */
+        .gallery-section { padding: 70px 32px; }
+        @media (max-width:768px) { .gallery-section { padding: 40px 16px !important; } }
+        /* ── MOBILE QUICK ACCESS ── */
+        .quickaccess-section { padding: 56px 32px; }
+        @media (max-width:768px) { .quickaccess-section { padding: 32px 16px !important; } }
+        /* ── HERO MIN HEIGHT ── */
+        @media (max-width:768px) { .hero-wrap { min-height: 420px !important; } }
+        /* ── FACULTY THUMBS ── */
+        @media (max-width:480px) {
+          .faculty-thumbs button { width:48px !important; height:48px !important; }
+        }
       `}</style>
 
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <div style={{ position:"relative", overflow:"hidden", minHeight:"520px", display:"flex", alignItems:"center" }}>
+      <div className="hero-wrap" style={{ position:"relative", overflow:"hidden", minHeight:"520px", display:"flex", alignItems:"center" }}>
         {SLIDES.map((src,i) => <img key={i} src={src} alt="" className={`slide-img${activeSlide===i?" active kb"+i:""}`} />)}
         <div style={{ position:"absolute", inset:0, background:"linear-gradient(135deg,rgba(58,59,58,0.82) 0%,rgba(27,28,27,0.7) 55%,rgba(42,44,43,0.55) 100%)", zIndex:1 }} />
         <div style={{ position:"absolute", bottom:"24px", left:"50%", transform:"translateX(-50%)", display:"flex", gap:"10px", zIndex:3 }}>
@@ -540,15 +563,15 @@ export default function Home({ navigate }) {
             <button key={i} onClick={() => setActiveSlide(i)} style={{ width:activeSlide===i?"32px":"10px", height:"10px", borderRadius:"5px", border:"none", background:activeSlide===i?"#c9a84c":"rgba(255,255,255,0.45)", cursor:"pointer", transition:"all 0.4s ease", padding:0 }} />
           ))}
         </div>
-        <div style={{ position:"relative", zIndex:2, padding:"90px 48px 100px", width:"100%" }}>
-          <div style={{ display:"inline-block", background:"rgba(201,168,76,0.25)", border:"1px solid #c9a84c", color:"#e8c97a", padding:"5px 16px", borderRadius:"20px", fontSize:"12px", letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:"22px", fontFamily:"'DM Sans',sans-serif", fontWeight:600 }}>Est. 1947 · Peshawar</div>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,5vw,60px)", color:"#ffffff", lineHeight:1.12, marginBottom:"20px", maxWidth:"720px", fontWeight:700, textShadow:"0 2px 20px rgba(0,0,0,0.6)", letterSpacing:"-0.5px" }}>
+        <div className="hero-inner" style={{ position:"relative", zIndex:2, width:"100%" }}>
+          <div className="hero-badge" style={{ display:"inline-block", background:"rgba(201,168,76,0.25)", border:"1px solid #c9a84c", color:"#e8c97a", padding:"5px 16px", borderRadius:"20px", fontSize:"12px", letterSpacing:"1.5px", textTransform:"uppercase", marginBottom:"22px", fontFamily:"'DM Sans',sans-serif", fontWeight:600 }}>Est. 1947 · Peshawar</div>
+          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(26px,5vw,60px)", color:"#ffffff", lineHeight:1.12, marginBottom:"20px", maxWidth:"720px", fontWeight:700, textShadow:"0 2px 20px rgba(0,0,0,0.6)", letterSpacing:"-0.5px" }}>
             Federal Government<br />Degree College for Men
           </h1>
-          <p style={{ fontSize:"clamp(15px,2vw,18px)", color:"rgba(255,255,255,0.95)", maxWidth:"560px", lineHeight:1.75, marginBottom:"38px", fontFamily:"'DM Sans',sans-serif", fontWeight:500, textShadow:"0 1px 8px rgba(0,0,0,0.7)" }}>
+          <p style={{ fontSize:"clamp(14px,2vw,18px)", color:"rgba(255,255,255,0.95)", maxWidth:"560px", lineHeight:1.75, marginBottom:"38px", fontFamily:"'DM Sans',sans-serif", fontWeight:500, textShadow:"0 1px 8px rgba(0,0,0,0.7)" }}>
             Empowering generations through quality education, discipline, and a commitment to excellence in the heart of Peshawar.
           </p>
-          <div style={{ display:"flex", gap:"14px", flexWrap:"wrap" }}>
+          <div className="hero-btns" style={{ display:"flex", gap:"14px", flexWrap:"wrap" }}>
             <button onClick={() => navigate("courses")} style={{ background:"#c9a84c", color:"#103d25", border:"none", padding:"14px 30px", borderRadius:"8px", fontSize:"15px", fontWeight:700, cursor:"pointer", fontFamily:"'DM Sans',sans-serif", boxShadow:"0 4px 16px rgba(201,168,76,0.4)", transition:"background 0.2s,transform 0.15s" }}
               onMouseEnter={e=>{ e.currentTarget.style.background="#e8c97a"; e.currentTarget.style.transform="translateY(-2px)"; }}
               onMouseLeave={e=>{ e.currentTarget.style.background="#c9a84c"; e.currentTarget.style.transform="none"; }}>Explore Courses</button>
@@ -570,7 +593,7 @@ export default function Home({ navigate }) {
       </div>
 
       {/* ── Faculty Slider ─────────────────────────────────────────────── */}
-      <div style={{ background:"#0d3020", padding:"60px 32px" }}>
+      <div className="faculty-section" style={{ background:"#0d3020", padding:"60px 32px" }}>
         <div style={{ maxWidth:"1000px", margin:"0 auto" }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"32px", flexWrap:"wrap", gap:"16px" }}>
             <div>
@@ -624,7 +647,7 @@ export default function Home({ navigate }) {
       </div>
 
       {/* ── Gallery Section ────────────────────────────────────────────── */}
-      <div style={{ background:"#071810", padding:"70px 32px" }}>
+      <div className="gallery-section" style={{ background:"#071810", padding:"70px 32px" }}>
         <div style={{ maxWidth:"1000px", margin:"0 auto" }}>
           <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", marginBottom:"36px", flexWrap:"wrap", gap:"16px" }}>
             <div>
@@ -657,7 +680,7 @@ export default function Home({ navigate }) {
       </div>
 
       {/* ── Quick Access ───────────────────────────────────────────────── */}
-      <div style={{ maxWidth:"1000px", margin:"0 auto", padding:"56px 32px" }}>
+      <div className="quickaccess-section" style={{ maxWidth:"1000px", margin:"0 auto", padding:"56px 32px" }}>
         <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"26px", color:"#103d25", marginBottom:"28px" }}>Quick Access</h2>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"20px" }}>
           {CARDS.map(c => (

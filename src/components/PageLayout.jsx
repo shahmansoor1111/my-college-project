@@ -6,7 +6,7 @@ export default function PageLayout({ children, navigate }) {
     
 
       {/* Content */}
-      <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "56px 32px" }}>
+      <div className="page-layout-inner" style={{ maxWidth: "1000px", margin: "0 auto", padding: "56px 32px" }}>
         {children}
       </div>
 
