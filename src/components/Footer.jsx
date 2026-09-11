@@ -1,3 +1,4 @@
+import logo from "../img/fglogo.jpeg"
 const NAV_LINKS = [
   { label: "Home", page: "home" },
   { label: "Vision", page: "vision" },
@@ -125,18 +126,17 @@ export default function Footer({ navigate }) {
               display: "flex", alignItems: "center", gap: "10px",
               background: "none", border: "none", cursor: "pointer", flexShrink: 0,
             }}>
-              <div style={{
-                width: "38px", height: "38px", borderRadius: "9px",
-                background: "linear-gradient(135deg,#c9a84c,#e8c97a)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
-              }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                  stroke="#103d25" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                </svg>
-              </div>
+             <img
+  src={logo}
+  alt="FG Logo"
+  style={{
+    width: "56",
+    height: "56",
+    borderRadius: "50%",
+    objectFit: "cover",
+    display: "block",
+  }}
+/>
             
             </button>
               <div>

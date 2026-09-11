@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import Footer from "../components/Footer";
-import fg1 from "../img/fg1.jpeg";
-import fg2 from "../img/fg2.jpeg";
+import fg1 from "../img/fg04.png";
+import fg2 from "../img/fg02.png";
 import principalImg from "../img/principal.jpeg";
-import bsCoordImg from "../img/zafar3.jpeg";
+import bsCoordImg from "../img/zafar0.png";
 import hodImg from "../img/HOD.jpeg";
 import seniorProfImg from "../img/Seniorprofessor.jpeg"; 
 import galleryImg1 from "../img/gall1.jpeg";
